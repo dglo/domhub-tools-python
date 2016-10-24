@@ -136,7 +136,8 @@ def moniRecords(moniDOMs):
 
     # JSON monitoring message headers
     MONI_QUANTITIES = ["dom_pwrstat_voltage", "dom_pwrstat_current",
-                       "dom_comstat_retx", "dom_comstat_badpkt"]
+                       "dom_comstat_retx", "dom_comstat_badpkt",
+                       "dom_comstat_rxbytes", "dom_comstat_txbytes"]
 
     recs = []
     for qty in MONI_QUANTITIES:
@@ -153,6 +154,12 @@ def moniRecords(moniDOMs):
                     rec.setDOMValue(omkey, moniArr[-1].comstat.nretxb - moniArr[0].comstat.nretxb)
             elif (qty == "dom_comstat_badpkt") and (len(moniArr) > 1):
                     rec.setDOMValue(omkey, moniArr[-1].comstat.badpkt - moniArr[0].comstat.badpkt)
+            elif (qty == "dom_comstat_rxbytes") and (len(moniArr) > 1):
+                    rec.setDOMValue(omkey, moniArr[-1].comstat.rxbytes -
+                                    moniArr[0].comstat.rxbytes)
+            elif (qty == "dom_comstat_txbytes") and (len(moniArr) > 1):
+                    rec.setDOMValue(omkey, moniArr[-1].comstat.txbytes - 
+                                    moniArr[0].comstat.txbytes)
                     
         # Quantities that report a count in a given period
         if qty_diff:

@@ -51,14 +51,17 @@ class MoniDOMTests(unittest.TestCase):
             self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
 
         recs = hubmonitools.moniRecords(self.moniDOMs)
-        self.assertEqual(len(recs), 4)
+        self.assertEqual(len(recs), 6)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
         self.assertEqual(currentRec.getDOMValue("2029-3"), 101)
 
         badpktRec =  [r for r in recs if r["varname"] == "dom_comstat_badpkt"][0]
         self.assertEqual(badpktRec.getDOMValue("2029-4"), 0)
-        
+
+        throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
+        self.assertEqual(throughputRec.getDOMValue("2029-1"), 0)
+
     def testAlerts(self):
         alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
 
