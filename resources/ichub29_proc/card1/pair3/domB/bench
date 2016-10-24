@@ -1,0 +1,6 @@
+DMA RX: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0
+DMA TX: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0
+Int. RX: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0
+Int. TX: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0
+Read: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0
+Write: t1=0 t2=0 sumdt=0 ndt=0 mindt=0 maxdt=0 lastdt=0

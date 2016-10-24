@@ -1,0 +1,808 @@
+{
+    "other": {
+        "desyfat": {
+            "comm": 62,
+            "dor": 8,
+            "iceboot": 62,
+            "quad": 16,
+            "waive": []
+        },
+        "dmice": {
+            "comm": 4,
+            "dor": 2,
+            "iceboot": 4,
+            "quad": 2,
+            "waive": []
+        },
+        "mdfl1-hub1": {
+            "comm": 64,
+            "dor": 8,
+            "iceboot": 64,
+            "quad": 16,
+            "waive": []
+        },
+        "mdfl2-hub1": {
+            "comm": 64,
+            "dor": 8,
+            "iceboot": 64,
+            "quad": 16,
+            "waive": []
+        },
+        "mdfl3-hub1": {
+            "comm": 64,
+            "dor": 8,
+            "iceboot": 64,
+            "quad": 16,
+            "waive": []
+        },
+        "swe-fat-ultuna1": {
+            "comm": 62,
+            "dor": 8,
+            "iceboot": 62,
+            "quad": 16,
+            "waive": []
+        }
+    },
+    "sps": {
+        "ichub01": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub02": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub03": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub04": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub05": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c2p2"
+            ]
+        },
+        "ichub06": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub07": {
+            "comm": 50,
+            "dor": 8,
+            "iceboot": 50,
+            "quad": 14,
+            "waive": [
+                "c4p1",
+                "c5p0",
+                "c5p2"
+            ]
+        },
+        "ichub08": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c7p1"
+            ]
+        },
+        "ichub09": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c1p3"
+            ]
+        },
+        "ichub10": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub11": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c0p0"
+            ]
+        },
+        "ichub12": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub13": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub14": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub15": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub16": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub17": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub18": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c5p2"
+            ]
+        },
+        "ichub19": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub20": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub21": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub22": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub23": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub24": {
+            "comm": 59,
+            "dor": 8,
+            "iceboot": 59,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub25": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub26": {
+            "comm": 59,
+            "dor": 8,
+            "iceboot": 59,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub27": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c0p3"
+            ]
+        },
+        "ichub28": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c5p0",
+                "c5p1"
+            ]
+        },
+        "ichub29": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c7p1"
+            ]
+        },
+        "ichub30": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub31": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub32": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c7p0"
+            ]
+        },
+        "ichub33": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub34": {
+            "comm": 53,
+            "dor": 8,
+            "iceboot": 53,
+            "quad": 15,
+            "waive": [
+                "c1p1",
+                "c1p2"
+            ]
+        },
+        "ichub35": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub36": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub37": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub38": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub39": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub40": {
+            "comm": 56,
+            "dor": 8,
+            "iceboot": 56,
+            "quad": 15,
+            "waive": [
+                "c6p1",
+                "c4p0"
+            ]
+        },
+        "ichub41": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub42": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c5p3"
+            ]
+        },
+        "ichub43": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub44": {
+            "comm": 56,
+            "dor": 8,
+            "iceboot": 56,
+            "quad": 15,
+            "waive": [
+                "c5p3",
+                "c3p0"
+            ]
+        },
+        "ichub45": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub46": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub47": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c6p3"
+            ]
+        },
+        "ichub48": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub49": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c6p3"
+            ]
+        },
+        "ichub50": {
+            "comm": 59,
+            "dor": 8,
+            "iceboot": 59,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub51": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c3p1"
+            ]
+        },
+        "ichub52": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub53": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c2p0"
+            ]
+        },
+        "ichub54": {
+            "comm": 59,
+            "dor": 8,
+            "iceboot": 59,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub55": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub56": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub57": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub58": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub59": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c5p2"
+            ]
+        },
+        "ichub60": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub61": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub62": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub63": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub64": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub65": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub66": {
+            "comm": 56,
+            "dor": 8,
+            "iceboot": 56,
+            "quad": 15,
+            "waive": [
+                "c4p0",
+                "c5p2"
+            ]
+        },
+        "ichub67": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub68": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub69": {
+            "comm": 55,
+            "dor": 8,
+            "iceboot": 55,
+            "quad": 15,
+            "waive": [
+                "c2p3",
+                "c5p3"
+            ]
+        },
+        "ichub70": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub71": {
+            "comm": 59,
+            "dor": 8,
+            "iceboot": 59,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub72": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub73": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub74": {
+            "comm": 57,
+            "dor": 8,
+            "iceboot": 57,
+            "quad": 15,
+            "waive": [
+                "c2p0"
+            ]
+        },
+        "ichub75": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub76": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub77": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub78": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub79": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c6p3"
+            ]
+        },
+        "ichub80": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub81": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub82": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub83": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub84": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub85": {
+            "comm": 60,
+            "dor": 8,
+            "iceboot": 60,
+            "quad": 15,
+            "waive": []
+        },
+        "ichub86": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c3p1"
+            ]
+        },
+        "ithub01": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub02": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub03": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub04": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub05": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub06": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub07": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub08": {
+            "comm": 12,
+            "dor": 8,
+            "iceboot": 12,
+            "quad": 6,
+            "waive": []
+        },
+        "ithub09": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        },
+        "ithub10": {
+            "comm": 24,
+            "dor": 8,
+            "iceboot": 24,
+            "quad": 12,
+            "waive": []
+        },
+        "ithub11": {
+            "comm": 32,
+            "dor": 8,
+            "iceboot": 32,
+            "quad": 16,
+            "waive": []
+        }
+    },
+    "spts": {
+        "ichub21": {
+            "comm": 5,
+            "dor": 2,
+            "iceboot": 4,
+            "quad": 2,
+            "waive": [
+		"c1p3"
+            ]
+        },
+        "ichub29": {
+            "comm": 4,
+            "dor": 2,
+            "iceboot": 4,
+            "quad": 1,
+            "waive": []
+        },
+        "scube": {
+            "comm": 64,
+            "dor": 8,
+            "iceboot": 64,
+            "quad": 16,
+            "waive": []
+        }
+    }
+}

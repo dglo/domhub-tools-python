@@ -1,0 +1,129 @@
+HUB NAME	DOR	QUADS	COMM	Iceboot		Hi Current				
+dmice	2	2	4	4
+spts-ithub01  	2	4	9	8
+spts-ichub29	2	1	4	4
+spts-ichub21	2	2	5	4	c0p1-p(ok)-c(b,ok)-v(ok,ok)
+spts-scube	8	16	64	64
+#sps-wczar	8	5	6	6    c1p3-p(ok)-c(b,ok)-v(ok,ok);c2p1-p(ok)-c(b,ok)-v(ok,ok);c2p2-p(ok)-c(b,ok)-v(ok,ok);c2p3-p(ok)-c(u,ok)-v(b,ok);c3p3-p(ok)-c(b,ok)-v(ok,ok);c4p3-p(ok)-c(b,ok)-v(ok,ok);c6p1-p(ok)-c(b,ok)-v(ok,ok)
+sps-wczar       8       14      30      30    c0p3-p(ok)-c(b,ok)-v(ok,ok);c2p1-p(ok)-c(b,ok)-v(ok,ok);c2p2-p(ok)-c(b,ok)-v(ok,ok);c3p0-p(ok)-c(b,ok)-v(ok,ok);c3p3-p(ok)-c(b,ok)-v(ok,ok);c4p0-p(ok)-c(b,ok)-v(ok,ok);c4p2-p(ok)-c(b,ok)-v(ok,ok);c4p3-p(ok)-c(b,ok)-v(ok,ok);c5p0-p(ok)-c(b,ok)-v(ok,ok);c5p1-p(ok)-c(b,ok)-v(ok,ok);c5p3-p(ok)-c(b,ok)-v(ok,ok);c6p0-p(ok)-c(b,ok)-v(ok,ok);c6p3-p(ok)-c(b,ok)-v(ok,ok);c7p0-p(ok)-c(b,ok)-v(ok,ok);c1p0-p(ok)-c(b,ok);c7p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-wczar2      8       3       0       0    c0p1-p(ok)-c(b,ok)-v(ok,ok);
+sps-amanda	1	2	2	2         c0p0-p(ok)-c(b,ok)-v(ok,ok);c0p2-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub21	8	15	60	60
+sps-ichub29	8	15	58	58        c7p1-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub30	8	15	58	58
+sps-ichub38	8	15	60	60
+sps-ichub39	8	15	60	60
+sps-ichub40	8	15	56	56        c6p1-p(ok)-c(b,ok)-v(ok,ok);c4p0-p(ok)-c(b,ok)-v(b,ok)
+sps-ichub49	8	15	58	58	c6p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub50	8	15	59	59
+sps-ichub59	8	15	58	58    c5p2-p(ok)-c(b,ok)-v(ok,ok)	
+sps-ichub58	8	15	60	60
+sps-ichub67	8	15	60	60
+sps-ichub66	8	15	56	56      c4p0-p(ok)-c(b,ok)-v(ok,ok);c5p2-p(ok)-c(b,ok)-v(ok,ok);
+sps-ichub74 8   15  57  57  c2p0-p(ok)-c(b,ok)-v(b,ok)
+sps-ichub73	8	15	60	60	
+sps-ichub65	8	15	60	60
+sps-ichub72	8	15	60	60        
+sps-ichub78	8	15	60	60
+sps-ichub48	8	15	60	60
+sps-ichub57	8	15	60	60
+sps-ichub47	8	15	58	58        c6p3-p(ok)-c(b,ok)-v(ok,ok)
+#sps-ichub46	8	14	54	54        c6p0-p(ok)-c(b,ok)-v(ok,ok)
+#sps-ichub56	8	15	58	58        c7p0-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub46     8       15      60      60        
+sps-ichub56	8	15	60	60        
+sps-ithub01	8	16	32	32
+sps-ithub02	8	16	32	32
+sps-ithub03	8	16	32	32
+sps-ithub04	8	16	32	32
+sps-ithub05    	8	16	32	32
+#sps-ithub05    	8	16	32	32
+sps-ithub06    	8	16	32	32
+#sps-ithub06    	8	12	24	24
+sps-ichub63    	8	15	60	60
+sps-ichub64    	8	15	60	60
+sps-ichub55    	8	15	60	60
+sps-ichub71    	8	15	59	59
+sps-ichub70    	8	15	60	60
+sps-ichub76    	8	15	60	60
+#sps-ichub76    	8	15	60	60
+sps-ichub77    	8	15	60	60	
+#sps-ichub77    	8	15	60	60
+sps-ichub75    	8	15	60	60
+#sps-ichub75    	8	15	60	60
+sps-ichub69    	8	15	55	55	c2p3-p(ok)-c(b,ok)-v(ok,ok);c5p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub60    	8	15	60	60     
+#sps-ichub60    	8	15	60	60
+sps-ichub68    	8	15	60	60
+sps-ichub61    	8	15	60	60
+sps-ichub62    	8	15	60      60      
+sps-ichub52    	8	15	60	60
+#sps-ichub52    	8	15	60	60
+sps-ichub44    	8	15	56	56	c5p3-p(ok)-c(b,ok)-v(ok,ok);c3p0-p(ok)-c(b,ok)-v(ok,ok)
+#sps-ichub44    	8	15	60	60
+sps-ichub53    	8	15	58	58	c2p0-p(ok)-c(b,ok)-v(ok,ok);
+#sps-ichub53    	8	15	60	60
+sps-ichub54	8	15	59	59	
+#sps-ichub54    	8	15	57      57      c6p1-p(ok)-c(b,ok)-v(ok,ok)
+#sps-ichub54    	8	15	60	60
+sps-ichub45    	8	15	60	60
+sps-ichub51     8       15      60      60     
+sps-ichub41     8       15      60      60
+#sps-ichub41     8       15      60      60
+sps-ichub42     8       15      58      58     c5p3-p(ok)-c(b,ok)-v(ok,ok)      
+mdfl1-hub1      8       16      64      64
+mdfl2-hub1      8       16      64      64
+mdfl3-hub1      8       16      64      64
+swe-fat-ultuna1 8       16      62      62
+desyfat         8       16      62      62
+sps-ithub07	8	16	32	32
+sps-ithub08	8	6	12	12
+sps-ichub18     8       15      58      58	c5p2-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub27	8	15	58	58     c0p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub36	8	15	60	60
+sps-ichub28	8	15	58	58     c5p0-p(u)-c(b,ok)-v(b,ok);c5p1-p(u)-c(ok,ok)-v(ok,ok) 
+sps-ichub19	8	15	60	60
+#sps-ichub19	8	15	58	58     c7p1-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub20	8	15	60	60
+sps-ichub13     8       15      60      60
+sps-ichub12     8       15      60      60
+sps-ichub11     8       15      58      58	c0p0-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub10     8       15      60      60
+sps-ichub06     8       15      60      60
+sps-ichub05     8       15      58      58	c2p2-p(ok)-c(b,ok)-v(ok,ok)   
+sps-ichub37	8	15	60	60
+sps-ichub17     8	15	60	60    
+sps-ichub26	8	15	59	59    
+sps-ichub83	8	15	60	60
+sps-ichub02	8	15	60	60
+sps-ichub03	8	15	60	60
+sps-ichub04	8	15	60	60
+sps-ichub08	8	15	58	58	c7p1-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub09	8	15	58	58      c1p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub15	8	15	60	60
+sps-ichub16	8	15	60	60
+sps-ichub23	8	15	60	60	
+sps-ichub24	8	15	59	59
+sps-ichub25	8	15	60	60	
+sps-ichub32	8	15	58	58      c7p0-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub33	8	15	60	60      
+sps-ichub34	8	15	53	53      c1p1-p(ok)-c(b,ok)-v(ok,ok);c1p2-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub35	8	15	60	60	
+sps-ichub51	8	15	58	58	c3p1-p(ok)-c(b,ok)-v(ok,ok);
+sps-ichub79	8	15	58	58	c6p3-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub80	8	15	60	60	
+sps-ichub81	8	15	60	60
+sps-ichub82	8	15	60	60
+#sps-ichub82     8       14      56      56
+sps-ichub84	8	15	60	60
+sps-ichub85	8	15	60	60
+sps-ichub86	8	15	58	58       c3p1-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub43     8       15      60      60
+sps-ithub09     8       16      32      32
+sps-ithub10     8       12      24      24
+sps-ithub11	8	16	32	32
+sps-ichub31	8	15	60	60
+sps-ichub01	8	15	60	60	
+sps-ichub07	8	14	50	50	c4p1-p(ok)-c(b,ok)-v(ok,ok);c5p0-p(ok)-c(b,ok)-v(ok,ok);c5p2-p(ok)-c(b,ok)-v(ok,ok)
+sps-ichub22	8	15	60	60	
+sps-ichub14	8	15	60	60
