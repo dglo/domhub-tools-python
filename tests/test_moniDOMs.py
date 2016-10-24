@@ -51,7 +51,7 @@ class MoniDOMTests(unittest.TestCase):
             self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
 
         recs = hubmonitools.moniRecords(self.moniDOMs)
-        self.assertEqual(len(recs), 6)
+        self.assertEqual(len(recs), 5)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
         self.assertEqual(currentRec.getDOMValue("2029-3"), 101)
