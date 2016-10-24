@@ -1,0 +1,15 @@
+Serial number: R1B0628D05
+Date: Tue May  9 11:08:47 CEST 2006
+revisions: swrev=1.35, commonrev=1.27
+commadc: ch=0 std=0.2835621 pass=1
+commadc: ch=1 std=0.3335571 pass=1
+commadc: ch=2 std=0.3876263 pass=1
+commadc: ch=3 std=0.4807899 pass=1
+commdac: ch=0 dc=508.656250 amp=515.966720 max=6.724182 rms=2.039890 pass=1
+commdac: ch=1 dc=503.697266 amp=517.135217 max=5.467738 rms=1.739363 pass=1
+commdac: ch=2 dc=493.739258 amp=514.169963 max=5.302169 rms=1.855347 pass=1
+commdac: ch=3 dc=496.065430 amp=520.107223 max=6.325687 rms=2.181804 pass=1
+power: ch=0 a=87.36627 tau=37.41489 ion=119 ioff=0 pass=TRUE
+power: ch=1 a=88.10168 tau=22.36451 ion=120.5 ioff=0.5 pass=TRUE
+power: ch=2 a=88.43088 tau=21.90851 ion=119 ioff=0 pass=TRUE
+power: ch=3 a=88.60085 tau=22.68748 ion=119.5 ioff=0.0 pass=TRUE

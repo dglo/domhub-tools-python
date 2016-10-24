@@ -1,0 +1,23 @@
+PCI configuration space for card 1:
+                    Vendor: 0x1234
+                    Device: 0x5678
+                   Command: 0x0087
+                    Status: 0x0480
+                  Revision: 0x01
+                     Class: 0x118000
+                Cache line: 0x00
+             Latency timer: 0xfc
+               Header type: 0x00
+                      BIST: 0x00
+   Base address register 0: 0x0000d201
+   Base address register 1: 0x00000000
+   Base address register 2: 0x00000000
+   Base address register 3: 0x00000000
+       CardBus CIS Pointer: 0x00000000
+       Subsystem vendor ID: 0x0000
+       Subsystem Device ID: 0x0000
+Expansion ROM Base Address: 0x00000000
+                  IRQ Line: 0x05
+                   IRQ Pin: 0x01
+                   Min_Gnt: 0xff
+                   Max_Lat: 0xff

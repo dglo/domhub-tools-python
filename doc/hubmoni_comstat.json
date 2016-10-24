@@ -1,0 +1,36 @@
+{
+    "prio": 3,
+    "service": "hubmoni",
+    "time": "2016-01-20 20:28:50.742679",
+    "value": {
+        "recordingStartTime": "2016-01-20 20:28:10.591234",
+        "recordingStopTime": "2016-01-20 20:28:40.700837",
+        "value": {
+            "(2021, 2)": 0,
+            "(2021, 3)": 0,
+            "(2021, 4)": 0,
+            "(2021, 5)": 0,
+            "(2021, 6)": 0
+        },
+        "version": 1
+    },
+    "varname": "dom_comstat_retx"
+}
+{
+    "prio": 3,
+    "service": "hubmoni",
+    "time": "2016-01-20 20:28:50.742772",
+    "value": {
+        "recordingStartTime": "2016-01-20 20:28:10.591234",
+        "recordingStopTime": "2016-01-20 20:28:40.700837",
+        "value": {
+            "(2021, 2)": 0,
+            "(2021, 3)": 0,
+            "(2021, 4)": 0,
+            "(2021, 5)": 0,
+            "(2021, 6)": 0
+        },
+        "version": 1
+    },
+    "varname": "dom_comstat_badpkt"
+}
