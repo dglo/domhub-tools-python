@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='domhub-tools-python',
-      version='1.4.1',
+      version='1.4.2',
       description='IceCube DOMHub Monitoring',
       author='John Kelley',
       author_email='jkelley@icecube.wisc.edu',
