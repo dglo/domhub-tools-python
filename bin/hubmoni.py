@@ -239,9 +239,10 @@ def main():
                         keepConnecting(s,addr,logger)
 
             
-            # Shift monitoring records to latest
+            # Shift DOM monitoring snapshot to latest
             for cwd in doms:
-                doms[cwd] = doms[cwd][-2:-1]
+                doms[cwd] = doms[cwd][-1:]
+
             lastSentTime = datetime.datetime.utcnow()
             
         time.sleep(moni_period)
