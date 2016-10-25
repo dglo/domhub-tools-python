@@ -4,7 +4,14 @@ import unittest
 import math
 import os
 import dor
+from time import sleep
+from datetime import datetime
 import hubmonitools
+
+# For python2.6 total_seconds()
+def timedelta_total_seconds(timedelta):
+    return (timedelta.microseconds + 0.0 +
+            (timedelta.seconds + timedelta.days * 24 * 3600) * 10 ** 6) / 10 ** 6
 
 class MoniDOMTests(unittest.TestCase):
 
@@ -44,12 +51,15 @@ class MoniDOMTests(unittest.TestCase):
         self.failUnless('dom_comstat_retx' not in recs)
         self.assertEqual(len(recs), 2)
 
-        # Get other set of monitoring records
+        # Get another set of monitoring records
         commDOMs = self.dor.getCommunicatingDOMs()        
         for dom in commDOMs:
             cwd = dom.cwd()
             self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
-
+            # Fake some bad packets
+            if (cwd == "01A"):
+                self.moniDOMs[cwd][-1].comstat.badpkt += 8
+            
         recs = hubmonitools.moniRecords(self.moniDOMs)
         self.assertEqual(len(recs), 5)
 
@@ -57,10 +67,26 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(currentRec.getDOMValue("2029-3"), 101)
 
         badpktRec =  [r for r in recs if r["varname"] == "dom_comstat_badpkt"][0]
-        self.assertEqual(badpktRec.getDOMValue("2029-4"), 0)
+        self.assertEqual(badpktRec.getDOMValue("2029-4"), 8)
 
+        # Get yet another set of monitoring records, check times
+        sleep(5)
+        for dom in commDOMs:
+            cwd = dom.cwd()
+            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
+            # Fake some received bytes
+            if (cwd == "01A"):
+                self.moniDOMs[cwd][-1].comstat.rxbytes += 31415926
+
+        recs = hubmonitools.moniRecords(self.moniDOMs)
         throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
-        self.assertEqual(throughputRec.getDOMValue("2029-1"), 0)
+        starttime = datetime.strptime(throughputRec["value"]["recordingStartTime"],
+                                      "%Y-%m-%d %H:%M:%S.%f")
+        stoptime = datetime.strptime(throughputRec["value"]["recordingStopTime"],
+                                      "%Y-%m-%d %H:%M:%S.%f")
+        delta_sec = int(timedelta_total_seconds(stoptime-starttime) + 0.5)
+        self.assertEqual(throughputRec.getDOMValue("2029-4"), 31415926)
+        self.assertEqual(delta_sec, 5)
 
     def testAlerts(self):
         alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)

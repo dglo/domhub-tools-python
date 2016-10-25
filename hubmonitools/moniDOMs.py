@@ -151,12 +151,12 @@ def moniRecords(moniDOMs):
             elif (qty == "dom_pwrstat_current"):
                 rec.setDOMValue(omkey, moniArr[0].current)
             elif (qty == "dom_comstat_retx") and (len(moniArr) > 1):
-                    rec.setDOMValue(omkey, moniArr[-1].comstat.nretxb - moniArr[0].comstat.nretxb)
+                    rec.setDOMValue(omkey, moniArr[-1].comstat.nretxb - moniArr[-2].comstat.nretxb)
             elif (qty == "dom_comstat_badpkt") and (len(moniArr) > 1):
-                    rec.setDOMValue(omkey, moniArr[-1].comstat.badpkt - moniArr[0].comstat.badpkt)
+                    rec.setDOMValue(omkey, moniArr[-1].comstat.badpkt - moniArr[-2].comstat.badpkt)
             elif (qty == "dom_comstat_rxbytes") and (len(moniArr) > 1):
                     rec.setDOMValue(omkey, moniArr[-1].comstat.rxbytes -
-                                    moniArr[0].comstat.rxbytes)
+                                    moniArr[-2].comstat.rxbytes)
 
         # Quantities that report a count in a given period
         if qty_diff:
