@@ -3,6 +3,7 @@
 #
 import time
 from fabric.api import *
+import os.path
 import hubmonitools
 
 HUBMONICMD = "~/.local/bin/hubmoni.py"
@@ -43,7 +44,7 @@ def deploy():
 
 def stop():
     run('ps aux | grep %s | grep -v grep | awk \'{print $2}\' | xargs -r kill -TERM' 
-        % HUBMONICMD)
+        % os.path.basename(HUBMONICMD))
 
 # This doesn't work (see http://www.fabfile.org/faq.html#why-can-t-i-run-programs-in-the-background-with-it-makes-fabric-hang)
 #def start():
