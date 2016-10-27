@@ -191,9 +191,9 @@ def main():
         for dom in commDOMs:
             cwd = dom.cwd()
             if cwd in doms:
-                doms[cwd].append(hubmonitools.moniDOMs.HubMoniDOM(dom))
+                doms[cwd].append(hubmonitools.moniDOMs.HubMoniDOM(dom, hub))
             else:
-                doms[cwd] = [ hubmonitools.moniDOMs.HubMoniDOM(dom) ]
+                doms[cwd] = [ hubmonitools.moniDOMs.HubMoniDOM(dom, hub) ]
             #print "moniDOMs[",cwd,"]:",doms[cwd]
 
         # Check for any alerts and send them

@@ -10,7 +10,6 @@ This will also install a cron job on the hub that will start the script.
 
 TODO:
 
-* Move out of sandbox
-* Add "quickstatus" functionality
-* Add hubmoni easy disable / enable?
+* Add "quickstatus" DOM check functionality
+* Add hubmoni config file
 

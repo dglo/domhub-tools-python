@@ -31,7 +31,7 @@ class MoniDOMTests(unittest.TestCase):
         commDOMs = self.dor.getCommunicatingDOMs()
         for dom in commDOMs:
             cwd = dom.cwd()
-            self.moniDOMs[cwd] = [ hubmonitools.HubMoniDOM(dom) ]
+            self.moniDOMs[cwd] = [ hubmonitools.HubMoniDOM(dom, self.hub) ]
             
     def testMoniDOMs(self):
         # Check that we have all CWDs and check 
@@ -51,11 +51,14 @@ class MoniDOMTests(unittest.TestCase):
         self.failUnless('dom_comstat_retx' not in recs)
         self.assertEqual(len(recs), 2)
 
+        # Check hub name
+        self.assertEqual(recs[0]["value"]["hub"], "ichub29")
+
         # Get another set of monitoring records
         commDOMs = self.dor.getCommunicatingDOMs()        
         for dom in commDOMs:
             cwd = dom.cwd()
-            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
+            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom, self.hub))
             # Fake some bad packets
             if (cwd == "01A"):
                 self.moniDOMs[cwd][-1].comstat.badpkt += 8
@@ -73,7 +76,7 @@ class MoniDOMTests(unittest.TestCase):
         sleep(5)
         for dom in commDOMs:
             cwd = dom.cwd()
-            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom))
+            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom, self.hub))
             # Fake some received bytes
             if (cwd == "01A"):
                 self.moniDOMs[cwd][-1].comstat.rxbytes += 31415926
