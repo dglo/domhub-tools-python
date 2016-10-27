@@ -5,8 +5,9 @@ import dor
 class HubMoniDOM(object):
     """Class containing increment of monitoring data from one
     DOM on a hub.  """
-    def __init__(self, dom):
+    def __init__(self, dom, hub):
         self.dom = dom
+        self.hub = hub
         self.updateTime = datetime.datetime.utcnow().__str__()
         if (self.dom is not None) and self.dom.pair.isPlugged():
             self.current = self.dom.pair.current()
@@ -24,19 +25,26 @@ class HubMoniRecord(dict):
     MONI_VERSION = 2
 
     def __init__(self, quantity):
+        self.countQty = False
         dict.__init__(self,
                       { "service" : HubMoniRecord.MONI_SERVICE,
                         "varname" : quantity,
                         "prio" : HubMoniRecord.MONI_PRIORITY,
-                        "time" : datetime.datetime.utcnow().__str__(),                      
+                        "time" : datetime.datetime.utcnow().__str__(),                        
                         "value" : { "value": {},
                                     "version" : HubMoniRecord.MONI_VERSION } })
 
     def setDOMValue(self, omkey, val):
-        self["value"]["value"][omkey] = val
+        if self.countQty:
+            self["value"]["counts"][omkey] = val
+        else:
+            self["value"]["value"][omkey] = val
 
     def getDOMValue(self, omkey):
-        return self["value"]["value"][omkey]
+        if self.countQty:
+            return self["value"]["counts"][omkey]
+        else:
+            return self["value"]["value"][omkey]
 
     def __str__(self):
         return json.dumps(self, sort_keys=True, indent=4, separators=(',', ': '))
@@ -58,7 +66,7 @@ class HubMoniAlert(dict):
                                                   # "notifies_header": "TBD"
                                                   }],
                                     "pages"     : HubMoniAlert.ALERT_PAGES,
-                                    "vars"      : { "hubname" : hub, "cluster" : cluster }
+                                    "vars"      : { "hub" : hub, "cluster" : cluster }
                                     }
                         })
         if alert_txt is not None and alert_desc is not None:
@@ -80,7 +88,7 @@ class HubMoniAlert(dict):
         if type(self) is type(other):
             return ((self["value"]["condition"] == other["value"]["condition"]) and
                     (self["value"]["notifies"][0]["notifies_txt"] == other["value"]["notifies"][0]["notifies_txt"]) and
-                    (self["value"]["vars"]["hubname"] == other["value"]["vars"]["hubname"]) and
+                    (self["value"]["vars"]["hub"] == other["value"]["vars"]["hub"]) and
                     (self["value"]["vars"]["cluster"] == other["value"]["vars"]["cluster"]))
         else:
             return False
@@ -115,7 +123,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
     # Check DOR-driver pwr_check conditions (vs. waivers)
     pwrFail = False
     for dom in dor.getPluggedDOMs():
-        moni = HubMoniDOM(dom)
+        moni = HubMoniDOM(dom, hub)
         # All power check failures are equivalent at the moment
         if not moni.pwrcheck.ok and not hubConfig.isWaived(hub, cluster, int(dom.card), int(dom.pair)):
             if not pwrFail:
@@ -141,8 +149,11 @@ def moniRecords(moniDOMs):
 
     recs = []
     for qty in MONI_QUANTITIES:
-        qty_diff = "comstat" in qty        
         rec = HubMoniRecord(qty)
+        # Counting quantities are handled differently
+        if ("comstat" in qty):
+            rec.countQty = True
+            rec["value"]["counts"] = rec["value"].pop("value")
         for cwd in moniDOMs:
             moniArr = moniDOMs[cwd]
             omkey = moniArr[0].dom.omkey()
@@ -159,12 +170,15 @@ def moniRecords(moniDOMs):
                                     moniArr[-2].comstat.rxbytes)
 
         # Quantities that report a count in a given period
-        if qty_diff:
+        if rec.countQty:
             if (len(moniArr) > 1):
+                rec["value"]["hub"] = moniArr[0].hub
                 rec["value"]["recordingStopTime"] = moniArr[-1].updateTime
                 rec["value"]["recordingStartTime"] = moniArr[0].updateTime
                 recs.append(rec)
         else:
+            if (len(moniArr) > 0):
+                rec["value"]["hub"] = moniArr[0].hub
             recs.append(rec)
                 
     return recs
