@@ -78,17 +78,19 @@ class MoniDOMTests(unittest.TestCase):
             cwd = dom.cwd()
             self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom, self.hub))
             # Fake some received bytes
-            if (cwd == "01A"):
-                self.moniDOMs[cwd][-1].comstat.rxbytes += 31415926
+            if (cwd == "00A"):
+                self.moniDOMs[cwd][-1].comstat.rxbytes += 162000000
 
         recs = hubmonitools.moniRecords(self.moniDOMs)
+
+        print recs
         throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
         starttime = datetime.strptime(throughputRec["value"]["recordingStartTime"],
                                       "%Y-%m-%d %H:%M:%S.%f")
         stoptime = datetime.strptime(throughputRec["value"]["recordingStopTime"],
                                       "%Y-%m-%d %H:%M:%S.%f")
         delta_sec = int(timedelta_total_seconds(stoptime-starttime) + 0.5)
-        self.assertEqual(throughputRec.getDOMValue("2029-4"), 31415926)
+        self.assertEqual(throughputRec.getDOMValue("2029-2"), 162000000)
         self.assertEqual(delta_sec, 5)
 
     def testAlerts(self):

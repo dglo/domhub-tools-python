@@ -54,7 +54,7 @@ class DORTests(unittest.TestCase):
     def testCommStats(self):
         cs = self.dor.getDOM('00A').commStats()
         cs1 = self.dor.getDOM('01A').commStats()
-        self.failUnless((cs.rxbytes == 26288504) and (cs.nretxb == 0) and
+        self.failUnless((cs.rxbytes == 157090610) and (cs.nretxb == 0) and
                         (cs1.txacks == 26566) and (cs1.rxacks == 478))
 
     def testPwrCheck(self):
