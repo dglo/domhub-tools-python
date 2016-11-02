@@ -179,7 +179,8 @@ def main():
     #-------------------------------------------------------------------
     # Loop forever, looking for communicating DOMs and reporting moni records    
     lastSentTime = datetime.datetime.utcnow()
-    doms = {}
+    moniDOMs = {}
+    moniDOMsPrev = {}
     activeAlerts = []
     
     while True:
@@ -188,14 +189,8 @@ def main():
             logger.warn("no communicating DOMs; will keep trying");
 
         # Get a new monitoring snapshot for all communicating DOMs
-        # The latest monitoring record is at the end
         for dom in commDOMs:
-            cwd = dom.cwd()
-            if cwd in doms:
-                doms[cwd].append(hubmonitools.moniDOMs.HubMoniDOM(dom, hub))
-            else:
-                doms[cwd] = [ hubmonitools.moniDOMs.HubMoniDOM(dom, hub) ]
-            #print "moniDOMs[",cwd,"]:",doms[cwd]
+            moniDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub) 
 
         # Check for any alerts and send them
         newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
@@ -226,7 +221,7 @@ def main():
         if (secSinceLastMoni >= report_period):
 
             # Construct monitoring records and send them
-            recs = hubmonitools.moniDOMs.moniRecords(doms)            
+            recs = hubmonitools.moniDOMs.moniRecords(moniDOMs, moniDOMsPrev) 
             for rec in recs:
                 if verbose:
                     print rec
@@ -239,11 +234,10 @@ def main():
                         logger.error("couldn't send JSON to socket.", exc_info=sys.exc_info())
                         keepConnecting(s,addr,logger)
 
-            
-            # Shift DOM monitoring snapshot to latest
-            for cwd in doms:
-                doms[cwd] = doms[cwd][-1:]
-
+            # Keep track of previous snapshot since some quantities
+            # are a difference between the two
+            moniDOMsPrev = moniDOMs
+            moniDOMs = {}
             lastSentTime = datetime.datetime.utcnow()
             
         time.sleep(moni_period)
