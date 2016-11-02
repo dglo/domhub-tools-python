@@ -150,7 +150,7 @@ def moniRecords(moniDOMs, moniDOMsPrev):
 
     # JSON monitoring message headers
     MONI_QUANTITIES = ["dom_pwrstat_voltage", "dom_pwrstat_current",
-                       "dom_comstat_nretxb", "dom_comstat_badpkt",
+                       "dom_comstat_retx", "dom_comstat_badpkt",
                        "dom_comstat_rxbytes", "dom_comstat_txbytes" ]
 
     recs = []
@@ -171,7 +171,7 @@ def moniRecords(moniDOMs, moniDOMsPrev):
                 else:
                     cnt = 0L
                     mPrev = moniDOMsPrev[cwd]
-                    if (qty == "dom_comstat_nretxb"):
+                    if (qty == "dom_comstat_retx"):
                         cnt = m.comstat.nretxb - mPrev.comstat.nretxb
                     elif (qty == "dom_comstat_badpkt"):
                         cnt = m.comstat.badpkt - mPrev.comstat.badpkt
