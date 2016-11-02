@@ -30,13 +30,12 @@ class MoniDOMTests(unittest.TestCase):
         self.moniDOMs = {}
         commDOMs = self.dor.getCommunicatingDOMs()
         for dom in commDOMs:
-            cwd = dom.cwd()
-            self.moniDOMs[cwd] = [ hubmonitools.HubMoniDOM(dom, self.hub) ]
+            self.moniDOMs[dom.cwd()] = hubmonitools.HubMoniDOM(dom, self.hub)
             
     def testMoniDOMs(self):
         # Check that we have all CWDs and check 
         self.assertEqual(sorted(self.moniDOMs.keys()), ['00A', '00B', '01A', '01B'])
-        m = self.moniDOMs['00B'][0]
+        m = self.moniDOMs['00B']
         self.assertEqual(m.dom.omkey(), "2029-1")
         self.assertEqual(m.current, 99)
         self.assertEqual(m.voltage, 89.124)
@@ -45,7 +44,7 @@ class MoniDOMTests(unittest.TestCase):
         self.failUnless(m.pwrcheck.ok)
 
     def testMoniRecord(self):        
-        recs = hubmonitools.moniRecords(self.moniDOMs)
+        recs = hubmonitools.moniRecords(self.moniDOMs, {})
 
         # Check that stats *don't* appear when there is only one record
         self.failUnless('dom_comstat_retx' not in recs)
@@ -55,16 +54,18 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(recs[0]["value"]["hub"], "ichub29")
 
         # Get another set of monitoring records
-        commDOMs = self.dor.getCommunicatingDOMs()        
+        commDOMs = self.dor.getCommunicatingDOMs()
+        moniDOMsPrev = self.moniDOMs
+        self.moniDOMs = {}
         for dom in commDOMs:
             cwd = dom.cwd()
-            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom, self.hub))
+            self.moniDOMs[cwd] = hubmonitools.HubMoniDOM(dom, self.hub)
             # Fake some bad packets
             if (cwd == "01A"):
-                self.moniDOMs[cwd][-1].comstat.badpkt += 8
+                self.moniDOMs[cwd].comstat.badpkt += 8
             
-        recs = hubmonitools.moniRecords(self.moniDOMs)
-        self.assertEqual(len(recs), 5)
+        recs = hubmonitools.moniRecords(self.moniDOMs, moniDOMsPrev)
+        self.assertEqual(len(recs), 6)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
         self.assertEqual(currentRec.getDOMValue("2029-3"), 101)
@@ -74,16 +75,17 @@ class MoniDOMTests(unittest.TestCase):
 
         # Get yet another set of monitoring records, check times
         sleep(5)
+        moniDOMsPrev = self.moniDOMs
+        self.moniDOMs = {}
         for dom in commDOMs:
             cwd = dom.cwd()
-            self.moniDOMs[cwd].append(hubmonitools.HubMoniDOM(dom, self.hub))
+            self.moniDOMs[cwd] = hubmonitools.HubMoniDOM(dom, self.hub)
             # Fake some received bytes
             if (cwd == "00A"):
-                self.moniDOMs[cwd][-1].comstat.rxbytes += 162000000
+                self.moniDOMs[cwd].comstat.rxbytes += 162000000
 
-        recs = hubmonitools.moniRecords(self.moniDOMs)
+        recs = hubmonitools.moniRecords(self.moniDOMs, moniDOMsPrev)
 
-        print recs
         throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
         starttime = datetime.strptime(throughputRec["value"]["recordingStartTime"],
                                       "%Y-%m-%d %H:%M:%S.%f")

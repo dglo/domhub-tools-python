@@ -145,20 +145,20 @@ def moniAlerts(dor, hubConfig, hub, cluster):
 
     return alerts
 
-def moniRecords(moniDOMs):
+def moniRecords(moniDOMs, moniDOMsPrev):
     """Construct the JSON monitoring records from the monitoring snapshots"""
 
     # JSON monitoring message headers
     MONI_QUANTITIES = ["dom_pwrstat_voltage", "dom_pwrstat_current",
                        "dom_comstat_nretxb", "dom_comstat_badpkt",
-                       "dom_comstat_rxbytes" ]
+                       "dom_comstat_rxbytes", "dom_comstat_txbytes" ]
 
     recs = []
     for qty in MONI_QUANTITIES:
         rec = HubMoniRecord(qty, countQty=("comstat" in qty))
         for cwd in moniDOMs:
             # Most recent monitoring snapshot for this DOM
-            m = moniDOMs[cwd][-1]
+            m = moniDOMs[cwd]
             rec["value"]["hub"] = m.hub
             omkey = m.dom.omkey()
             if (qty == "dom_pwrstat_voltage"):
@@ -166,16 +166,19 @@ def moniRecords(moniDOMs):
             elif (qty == "dom_pwrstat_current"):
                 rec.setDOMValue(omkey, m.current)
             elif rec.countQty:
-                if (len(moniDOMs[cwd]) <= 1):
+                if cwd not in moniDOMsPrev:
                     rec.valid = False
                 else:
-                    mPrev = moniDOMs[cwd][-2]
+                    cnt = 0L
+                    mPrev = moniDOMsPrev[cwd]
                     if (qty == "dom_comstat_nretxb"):
-                        cnt = long(m.comstat.nretxb - mPrev.comstat.nretxb)
+                        cnt = m.comstat.nretxb - mPrev.comstat.nretxb
                     elif (qty == "dom_comstat_badpkt"):
-                        cnt = long(m.comstat.badpkt - mPrev.comstat.badpkt)
+                        cnt = m.comstat.badpkt - mPrev.comstat.badpkt
                     elif (qty == "dom_comstat_rxbytes"):
-                        cnt = long(m.comstat.rxbytes - mPrev.comstat.rxbytes)
+                        cnt = m.comstat.rxbytes - mPrev.comstat.rxbytes
+                    elif (qty == "dom_comstat_txbytes"):
+                        cnt = m.comstat.txbytes - mPrev.comstat.txbytes
                     # A negative count most likely means the comstats
                     # were reset underneath us
                     if (cnt < 0):
