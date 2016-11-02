@@ -188,6 +188,7 @@ def main():
             logger.warn("no communicating DOMs; will keep trying");
 
         # Get a new monitoring snapshot for all communicating DOMs
+        # The latest monitoring record is at the end
         for dom in commDOMs:
             cwd = dom.cwd()
             if cwd in doms:

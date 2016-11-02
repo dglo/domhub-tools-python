@@ -24,15 +24,21 @@ class HubMoniRecord(dict):
     MONI_PRIORITY = 3
     MONI_VERSION = 2
 
-    def __init__(self, quantity):
-        self.countQty = False
+    def __init__(self, quantity, countQty):
+        self.valid = True
+        self.countQty = countQty
         dict.__init__(self,
                       { "service" : HubMoniRecord.MONI_SERVICE,
                         "varname" : quantity,
                         "prio" : HubMoniRecord.MONI_PRIORITY,
                         "time" : datetime.datetime.utcnow().__str__(),                        
-                        "value" : { "value": {},
-                                    "version" : HubMoniRecord.MONI_VERSION } })
+                        })
+        if countQty:
+            self["value"] = {"counts": {},
+                             "version" : HubMoniRecord.MONI_VERSION }
+        else: 
+            self["value"] = {"value": {},
+                             "version" : HubMoniRecord.MONI_VERSION }
 
     def setDOMValue(self, omkey, val):
         if self.countQty:
@@ -144,41 +150,42 @@ def moniRecords(moniDOMs):
 
     # JSON monitoring message headers
     MONI_QUANTITIES = ["dom_pwrstat_voltage", "dom_pwrstat_current",
-                       "dom_comstat_retx", "dom_comstat_badpkt",
+                       "dom_comstat_nretxb", "dom_comstat_badpkt",
                        "dom_comstat_rxbytes" ]
 
     recs = []
     for qty in MONI_QUANTITIES:
-        rec = HubMoniRecord(qty)
-        # Counting quantities are handled differently
-        if ("comstat" in qty):
-            rec.countQty = True
-            rec["value"]["counts"] = rec["value"].pop("value")
+        rec = HubMoniRecord(qty, countQty=("comstat" in qty))
         for cwd in moniDOMs:
-            moniArr = moniDOMs[cwd]
-            omkey = moniArr[0].dom.omkey()
+            # Most recent monitoring snapshot for this DOM
+            m = moniDOMs[cwd][-1]
+            rec["value"]["hub"] = m.hub
+            omkey = m.dom.omkey()
             if (qty == "dom_pwrstat_voltage"):
-                rec.setDOMValue(omkey, moniArr[0].voltage)
+                rec.setDOMValue(omkey, m.voltage)
             elif (qty == "dom_pwrstat_current"):
-                rec.setDOMValue(omkey, moniArr[0].current)
-            elif (qty == "dom_comstat_retx") and (len(moniArr) > 1):
-                    rec.setDOMValue(omkey, moniArr[-1].comstat.nretxb - moniArr[-2].comstat.nretxb)
-            elif (qty == "dom_comstat_badpkt") and (len(moniArr) > 1):
-                    rec.setDOMValue(omkey, moniArr[-1].comstat.badpkt - moniArr[-2].comstat.badpkt)
-            elif (qty == "dom_comstat_rxbytes") and (len(moniArr) > 1):
-                    rec.setDOMValue(omkey, moniArr[-1].comstat.rxbytes -
-                                    moniArr[-2].comstat.rxbytes)
+                rec.setDOMValue(omkey, m.current)
+            elif rec.countQty:
+                if (len(moniDOMs[cwd]) <= 1):
+                    rec.valid = False
+                else:
+                    mPrev = moniDOMs[cwd][-2]
+                    if (qty == "dom_comstat_nretxb"):
+                        cnt = long(m.comstat.nretxb - mPrev.comstat.nretxb)
+                    elif (qty == "dom_comstat_badpkt"):
+                        cnt = long(m.comstat.badpkt - mPrev.comstat.badpkt)
+                    elif (qty == "dom_comstat_rxbytes"):
+                        cnt = long(m.comstat.rxbytes - mPrev.comstat.rxbytes)
+                    # A negative count most likely means the comstats
+                    # were reset underneath us
+                    if (cnt < 0):
+                        rec.valid = False
+                    else:
+                        rec.setDOMValue(omkey, cnt)
+                        rec["value"]["recordingStopTime"] = m.updateTime
+                        rec["value"]["recordingStartTime"] = mPrev.updateTime
 
-        # Quantities that report a count in a given period
-        if rec.countQty:
-            if (len(moniArr) > 1):
-                rec["value"]["hub"] = moniArr[0].hub
-                rec["value"]["recordingStopTime"] = moniArr[-1].updateTime
-                rec["value"]["recordingStartTime"] = moniArr[0].updateTime
-                recs.append(rec)
-        else:
-            if (len(moniArr) > 0):
-                rec["value"]["hub"] = moniArr[0].hub
+        if rec.valid:
             recs.append(rec)
                 
     return recs
