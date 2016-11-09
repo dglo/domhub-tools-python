@@ -364,12 +364,14 @@ class CommStats:
     """
     Class to parse and store comstat values and to highlight changes in same
     """
+    # TEMP FIX ME: NACKQ can be negative from the driver, this is a bug in 
+    # dor-driver
     CSPAT = """(?msx)\
 /dev/dhc(\d)w(\d)d(\w)\s*
 RX:\s*(\d+)B,\s*MSGS=(\d+)\s*NINQ=(\d+)\s*PKTS=(\d+)\s*ACKS=(\d+)\s*
 \s*BADPKT=(\d+)\s*BADHDR=(\d+)\s*BADSEQ=(\d+)\s*NCTRL=(\d+)\s*NCI=(\d+)\s*NIC=(\d+)\s*
 TX:\s*(\d+)B,\s*MSGS=(\d+)\s*NOUTQ=(\d+)\s*RESENT=(\d+)\s*PKTS=(\d+)\s*ACKS=(\d+)\s*
-NACKQ=(\d+)\s*NRETXB=(\d+)\s*RETXB_BYTES=(\d+)\s*NRETXQ=(\d+)\s*NCTRL=(\d+)\s*NCI=(\d+)\s*NIC=(\d+)\s*
+NACKQ=(-?\d+)\s*NRETXB=(\d+)\s*RETXB_BYTES=(\d+)\s*NRETXQ=(\d+)\s*NCTRL=(\d+)\s*NCI=(\d+)\s*NIC=(\d+)\s*
 NCONNECTS=(\d+)\s*NHDWRTIMEOUTS=(\d+)\s*OPEN=(\S+)\s*CONNECTED=(\S+)\s*
 RXFIFO=(.+?)\ TXFIFO=(.+?)\ DOM_RXFIFO=(\S+)"""
     

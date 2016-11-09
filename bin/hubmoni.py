@@ -36,7 +36,7 @@ LOGFILE = "/tmp/hubmoni.log"
 HUBCONFIG = os.environ['HOME']+"/hubConfig.json"
 
 # Default monitoring period, in seconds
-MONI_PERIOD = 30
+MONI_PERIOD = 60
 
 # Default monitoring reporting period, in seconds
 MONI_REPORT_PERIOD = 3600
