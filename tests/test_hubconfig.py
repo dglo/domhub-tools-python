@@ -19,6 +19,16 @@ class HubConfigTests(unittest.TestCase):
                         hub["iceboot"] == 60 and
                         hub["quad"] == 15)
 
+    def testHostCluster(self):
+        host,cluster = hubmonitools.getHostCluster(hostname='access.icecube.southpole.usap.gov')
+        self.failUnless(host == 'access' and cluster=='sps')
+
+        host,cluster = hubmonitools.getHostCluster(hostname='ichub21.spts.icecube.wisc.edu')
+        self.failUnless(host == 'ichub21' and cluster=='spts')
+
+        host,cluster = hubmonitools.getHostCluster(hostname='access.sptsn.icecube.wisc.edu')
+        self.failUnless(host == 'access' and cluster=='spts')
+
     def testHubs(self):
         hubs = self.conf.hubs("spts")
         self.failUnless("ichub21" in hubs)

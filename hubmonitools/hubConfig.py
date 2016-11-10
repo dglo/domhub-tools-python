@@ -45,11 +45,11 @@ def getHostCluster(hostname=None):
             
     address = hostname.split('.')
     host = address[0].rstrip()
-    if (len(address) > 1) and (address[1] in ["sps", "spts", "sptsn"]):
-        if address[1]=='sptsn':
+    if (len(address) > 1):
+        if (address[1] in ['sptsn', 'spts']):
             cluster='spts'
-        else:
-            cluster = address[1]
+        elif address[-1]=='gov':
+            cluster = 'sps'
     else:
         cluster = "other"
     return host, cluster
