@@ -752,11 +752,11 @@
             "waive": []
         },
         "ithub08": {
-            "comm": 12,
+            "comm": 17,
             "dor": 8,
-            "iceboot": 12,
-            "quad": 6,
-            "waive": []
+            "iceboot": 17,
+            "quad": 9,
+            "waive": ["c4p1"]
         },
         "ithub09": {
             "comm": 32,

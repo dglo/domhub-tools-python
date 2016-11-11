@@ -62,6 +62,7 @@ env.user = 'testdaq'
 # the servers where the commands are executed
 hubconf = hubmonitools.HubConfig(hubConfigFile="resources/hubConfig.json")
 (host, cluster) = hubmonitools.getHostCluster()
+print "Cluster:",cluster
 print "Hosts:",env.hosts
 if (env.hosts == []):
     env.hosts = hubconf.hubs(cluster)

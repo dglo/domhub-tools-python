@@ -48,7 +48,7 @@ def getHostCluster(hostname=None):
     if (len(address) > 1):
         if (address[1] in ['sptsn', 'spts']):
             cluster='spts'
-        elif address[-1]=='gov':
+        elif address[-1].rstrip()=='gov':
             cluster = 'sps'
     else:
         cluster = "other"
