@@ -433,13 +433,11 @@
             "waive": []
         },
         "ichub51": {
-            "comm": 58,
+            "comm": 60,
             "dor": 8,
-            "iceboot": 58,
+            "iceboot": 60,
             "quad": 15,
-            "waive": [
-                "c3p1"
-            ]
+            "waive": []
         },
         "ichub52": {
             "comm": 60,
