@@ -8,6 +8,11 @@ import hubmonitools
 
 HUBMONICMD = "~/.local/bin/hubmoni.py"
 
+# Remote hosts list: all of the hubs
+hubconf = hubmonitools.HubConfig(hubConfigFile="resources/hubConfig.json")
+(host, cluster) = hubmonitools.getHostCluster()
+hubhosts = hubconf.hubs(cluster)
+
 def installCronjob(label, job):
     bashstr = '(crontab -l 2>/dev/null | grep -x \"# %s" > /dev/null 2>/dev/null)' % label
     bashstr += ' || (crontab -l 2>/dev/null | { cat; echo; echo \"# %s\";' % label
@@ -18,6 +23,8 @@ def pack():
     # create a new source distribution as tarball
     local('python setup.py sdist --formats=gztar', capture=False)
     
+@hosts(hubhosts)
+@parallel
 def deploy():
     # Stop any existing process
     stop()
@@ -42,6 +49,7 @@ def deploy():
     # Install the cron job
     installCronjob("hubmoni cron", "*/10 * * * * %s" % HUBMONICMD)
 
+@hosts(hubhosts)
 def stop():
     run('ps aux | grep %s | grep -v grep | awk \'{print $2}\' | xargs -r kill -TERM' 
         % os.path.basename(HUBMONICMD))
@@ -50,6 +58,7 @@ def stop():
 #def start():
 #    run('nohup %s &' % HUBMONICMD)
 
+@hosts(hubhosts)
 def restart():
     stop()
     # Cron will restart for us!
@@ -58,11 +67,3 @@ def restart():
 
 # the user to use for the remote commands
 env.user = 'testdaq'
-
-# the servers where the commands are executed
-hubconf = hubmonitools.HubConfig(hubConfigFile="resources/hubConfig.json")
-(host, cluster) = hubmonitools.getHostCluster()
-print "Cluster:",cluster
-print "Hosts:",env.hosts
-if (env.hosts == []):
-    env.hosts = hubconf.hubs(cluster)
