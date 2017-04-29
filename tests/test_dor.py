@@ -7,7 +7,7 @@ import os
 
 class DORTests(unittest.TestCase):
 
-    PREFIX = os.path.dirname(os.path.abspath(__file__))+"/../resources/ichub29_proc"
+    PREFIX = os.path.dirname(os.path.abspath(__file__))+"/ichub29_proc"
 
     def setUp(self):
         self.dor = dor.DOR(DORTests.PREFIX)
