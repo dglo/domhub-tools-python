@@ -56,8 +56,8 @@ class HubMoniRecord(dict):
         return json.dumps(self, sort_keys=True, indent=4, separators=(',', ': '))
     
 class HubMoniAlert(dict):
-    ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
-    #ALERT_NOTIFIES = []
+    #ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
+    ALERT_NOTIFIES = []
     ALERT_PRIORITY = 1
     ALERT_PAGES = False
     ALERT_SERVICE = "hubmoni"
