@@ -10,5 +10,5 @@ setup(name='domhub-tools-python',
       url='http://icecube.wisc.edu',
       test_suite="tests",
       scripts=['bin/hubmoni.py', 'bin/domstate.py', 'bin/status.py'],
-      packages=find_packages()
+      packages=find_packages(exclude=["tests"])
       )
