@@ -56,7 +56,8 @@ class HubMoniRecord(dict):
         return json.dumps(self, sort_keys=True, indent=4, separators=(',', ': '))
     
 class HubMoniAlert(dict):
-    ALERT_NOTIFIES = "jkelley@icecube.wisc.edu"
+    ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
+    #ALERT_NOTIFIES = []
     ALERT_PRIORITY = 1
     ALERT_PAGES = False
     ALERT_SERVICE = "hubmoni"
@@ -67,12 +68,9 @@ class HubMoniAlert(dict):
                         "varname" : "alert",
                         "t" : datetime.datetime.utcnow().__str__(),
                         "prio" : HubMoniAlert.ALERT_PRIORITY,
-                        "value" : { "notifies": [{"receiver": HubMoniAlert.ALERT_NOTIFIES,
-                                                  # "notifies_txt": "TBD",
-                                                  # "notifies_header": "TBD"
-                                                  }],
-                                    "pages"     : HubMoniAlert.ALERT_PAGES,
-                                    "vars"      : { "hub" : hub, "cluster" : cluster }
+                        "value" : { "pages"     : HubMoniAlert.ALERT_PAGES,
+                                    "vars"      : { "hub" : hub, "cluster" : cluster },
+                                    "notifies"  : []
                                     }
                         })
         if alert_txt is not None and alert_desc is not None:
@@ -81,19 +79,24 @@ class HubMoniAlert(dict):
     def setAlert(self, alert_txt, alert_desc):
         """Set the alert text and description (other fields are common)"""
         self["value"]["condition"] = alert_txt
-        self["value"]["notifies"][0]["notifies_header"] = "HubMoni alert: " + alert_txt
-        self["value"]["notifies"][0]["notifies_txt"] = alert_desc
+        self["value"]["desc"] = alert_desc
+        for receiver in HubMoniAlert.ALERT_NOTIFIES:            
+            self["value"]["notifies"].append({"receiver": receiver,
+                                              "notifies_header": "HubMoni alert: " + alert_txt,
+                                              "notifies_txt": alert_desc })        
 
     def appendAlert(self, alert_desc):
         """Append description to the alert if it's not already included"""
-        if alert_desc not in self["value"]["notifies"][0]["notifies_txt"]:
-            self["value"]["notifies"][0]["notifies_txt"] += alert_desc
+        if alert_desc not in self["value"]["desc"]:
+            self["value"]["desc"] += alert_desc
+            for idx,receiver in enumerate(self["value"]["notifies"]):
+                self["value"]["notifies"][idx]["notifies_txt"] += alert_desc
             
     def __eq__(self, other):
         """Overide equals for alert equivalence"""
         if type(self) is type(other):
             return ((self["value"]["condition"] == other["value"]["condition"]) and
-                    (self["value"]["notifies"][0]["notifies_txt"] == other["value"]["notifies"][0]["notifies_txt"]) and
+                    (self["value"]["desc"] == other["value"]["desc"]) and
                     (self["value"]["vars"]["hub"] == other["value"]["vars"]["hub"]) and
                     (self["value"]["vars"]["cluster"] == other["value"]["vars"]["cluster"]))
         else:
