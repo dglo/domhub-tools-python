@@ -15,7 +15,7 @@ def timedelta_total_seconds(timedelta):
 
 class MoniDOMTests(unittest.TestCase):
 
-    PREFIX = os.path.dirname(os.path.abspath(__file__))+"/../resources/ichub29_proc"
+    PREFIX = os.path.dirname(os.path.abspath(__file__))+"/ichub29_proc"
     HUBADDRESS = "ichub29.spts.icecube.wisc.edu"
     HUBCONFIG = os.path.dirname(os.path.abspath(__file__))+"/../resources/hubConfig.json"
     
