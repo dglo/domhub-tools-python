@@ -179,8 +179,8 @@ def main():
     #-------------------------------------------------------------------
     # Loop forever, looking for communicating DOMs and reporting moni records    
     lastSentTime = datetime.datetime.utcnow()
-    moniDOMs = {}
-    moniDOMsPrev = {}
+    mDOMs = {}
+    mDOMsPrev = {}
     activeAlerts = []
     
     while True:
@@ -190,7 +190,7 @@ def main():
 
         # Get a new monitoring snapshot for all communicating DOMs
         for dom in commDOMs:
-            moniDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub) 
+            mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub) 
 
         # Check for any alerts and send them
         newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
@@ -221,7 +221,7 @@ def main():
         if (secSinceLastMoni >= report_period):
 
             # Construct monitoring records and send them
-            recs = hubmonitools.moniDOMs.moniRecords(moniDOMs, moniDOMsPrev) 
+            recs = hubmonitools.moniDOMs.moniRecords(mDOMs, mDOMsPrev) 
             for rec in recs:
                 if verbose:
                     print rec
@@ -236,8 +236,8 @@ def main():
 
             # Keep track of previous snapshot since some quantities
             # are a difference between the two
-            moniDOMsPrev = moniDOMs
-            moniDOMs = {}
+            mDOMsPrev = mDOMs
+            mDOMs = {}
             lastSentTime = datetime.datetime.utcnow()
             
         time.sleep(moni_period)
