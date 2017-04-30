@@ -1,0 +1,14 @@
+
+v1.4.9 -- 30 April 2017
+
+* add alert grace period after reboot
+* user alert needs a description
+* add alert grace period after reboot
+* remove emails from user alerts
+* parallelize fab rollout
+* don't deploy test resources (like entire procfile tree)
+
+v1.4.8 -- 30 January 2017
+
+* inital SPS deployment after project rework
+ 

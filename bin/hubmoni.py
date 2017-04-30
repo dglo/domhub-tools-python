@@ -49,6 +49,9 @@ SOCKET_WAIT = 60
 ZMQ_HOSTNAME = "expcont"
 ZMQ_PORT = 6668
 
+# Grace period for alert after reboot, seconds
+ALERT_GRACE_PERIOD = 300
+
 #-------------------------------------------------------------------
 def keepConnecting(s, addr, logger):
     while True:
@@ -61,6 +64,13 @@ def keepConnecting(s, addr, logger):
         else:
             logger.info("Connected to ZMQ listener at %s" % addr)
             return
+
+def getUptime():
+    uptime = -1
+    with open("/proc/uptime", "r") as f:
+        vals = f.readline().split()
+        uptime = float(vals[0])
+    return uptime
 
 #-------------------------------------------------------------------
 def main():
@@ -93,7 +103,11 @@ def main():
     report_period = options.report_period
     moni_period = options.moni_period
     hubconfig_file = options.hubconfig_file
-    
+
+    # TEMP FIX ME
+    print getUptime()
+    sys.exit(0)
+
     #-------------------------------------------------------------------
     # Before doing anything, create a PID file so we only run this once
     pid = str(os.getpid())
@@ -193,7 +207,9 @@ def main():
             mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub) 
 
         # Check for any alerts and send them
-        newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
+        uptime = getUptime()
+        if (uptime < 0) or (uptime > ALERT_GRACE_PERIOD):
+            newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
 
         # Clear alerts that have gone away
         for alert in activeAlerts:
