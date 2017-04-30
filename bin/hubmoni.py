@@ -104,10 +104,6 @@ def main():
     moni_period = options.moni_period
     hubconfig_file = options.hubconfig_file
 
-    # TEMP FIX ME
-    print getUptime()
-    sys.exit(0)
-
     #-------------------------------------------------------------------
     # Before doing anything, create a PID file so we only run this once
     pid = str(os.getpid())
