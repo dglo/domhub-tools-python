@@ -50,7 +50,7 @@ ZMQ_HOSTNAME = "expcont"
 ZMQ_PORT = 6668
 
 # Grace period for alert after reboot, seconds
-ALERT_GRACE_PERIOD = 300
+ALERT_GRACE_PERIOD = 600
 
 #-------------------------------------------------------------------
 def keepConnecting(s, addr, logger):
@@ -192,7 +192,8 @@ def main():
     mDOMs = {}
     mDOMsPrev = {}
     activeAlerts = []
-    
+    newAlerts = []
+
     while True:
         commDOMs = dorDriver.getCommunicatingDOMs()
         if not commDOMs:
