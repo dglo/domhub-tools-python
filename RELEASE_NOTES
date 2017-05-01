@@ -1,6 +1,8 @@
 
 v1.4.9 -- 30 April 2017
 
+* enable paging
+* remove hub name from alert text (it's in description)
 * add alert grace period after reboot
 * user alert needs a description
 * add alert grace period after reboot
