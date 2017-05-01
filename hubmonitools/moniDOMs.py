@@ -59,7 +59,7 @@ class HubMoniAlert(dict):
     #ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
     ALERT_NOTIFIES = []
     ALERT_PRIORITY = 1
-    ALERT_PAGES = False
+    ALERT_PAGES = True
     ALERT_SERVICE = "hubmoni"
     
     def __init__(self, hub, cluster, alert_txt=None, alert_desc=None):
@@ -93,10 +93,9 @@ class HubMoniAlert(dict):
                 self["value"]["notifies"][idx]["notifies_txt"] += alert_desc
             
     def __eq__(self, other):
-        """Overide equals for alert equivalence"""
+        """Overide equals for alert equivalence."""
         if type(self) is type(other):
             return ((self["value"]["condition"] == other["value"]["condition"]) and
-                    (self["value"]["desc"] == other["value"]["desc"]) and
                     (self["value"]["vars"]["hub"] == other["value"]["vars"]["hub"]) and
                     (self["value"]["vars"]["cluster"] == other["value"]["vars"]["cluster"]))
         else:
@@ -116,14 +115,14 @@ def moniAlerts(dor, hubConfig, hub, cluster):
 
     # Check number of DOR cards
     if (len(dor.cards) != conf["dor"]):
-        alert_txt = "Unexpected number of DOR cards on %s" % hub
+        alert_txt = "Unexpected number of DOR cards"
         alert_desc = "%s: expected %d DOR cards, found %d" % (hub, conf["dor"], len(dor.cards))
         alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
         alerts.append(alert)
         
     # Check number of communicating DOMs
     if (len(dor.getCommunicatingDOMs()) != conf["comm"]):
-        alert_txt = "Unexpected number of communicating DOMs on %s" % hub
+        alert_txt = "Unexpected number of communicating DOMs"
         alert_desc = "%s: expected %d communicating DOMs, found %d" % \
             (hub, conf["comm"], len(dor.getCommunicatingDOMs()))
         alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)        
@@ -136,7 +135,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
         # All power check failures are equivalent at the moment
         if not moni.pwrcheck.ok and not hubConfig.isWaived(hub, cluster, int(dom.card), int(dom.pair)):
             if not pwrFail:
-                alert_txt = "DOM power check failure on %s" % hub
+                alert_txt = "DOM power check failure"
                 alert_desc = "%s: " % hub
                 alert_desc += moni.pwrcheck.text
                 alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
