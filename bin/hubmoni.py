@@ -36,7 +36,7 @@ LOGFILE = "/tmp/hubmoni.log"
 HUBCONFIG = os.environ['HOME']+"/hubConfig.json"
 
 # Default monitoring period, in seconds
-MONI_PERIOD = 60
+MONI_PERIOD = 120
 
 # Default monitoring reporting period, in seconds
 MONI_REPORT_PERIOD = 3600
@@ -201,12 +201,15 @@ def main():
 
         # Get a new monitoring snapshot for all communicating DOMs
         for dom in commDOMs:
-            mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub) 
+            mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub)
 
         # Check for any alerts and send them
         uptime = getUptime()
         if (uptime < 0) or (uptime > ALERT_GRACE_PERIOD):
-            newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
+            try:
+                newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
+            except AttributeError:
+                logger.error("Malformed alerts... driver unloaded?!")
 
         # Clear alerts that have gone away
         for alert in activeAlerts:
@@ -234,7 +237,12 @@ def main():
         if (secSinceLastMoni >= report_period):
 
             # Construct monitoring records and send them
-            recs = hubmonitools.moniDOMs.moniRecords(mDOMs, mDOMsPrev) 
+            recs = []
+            try:
+                recs = hubmonitools.moniDOMs.moniRecords(mDOMs, mDOMsPrev) 
+            except AttributeError:
+                logger.error("Malformed moni records... driver unloaded?!")
+            
             for rec in recs:
                 if verbose:
                     print rec
