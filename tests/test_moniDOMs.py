@@ -48,10 +48,15 @@ class MoniDOMTests(unittest.TestCase):
 
         # Check that stats *don't* appear when there is only one record
         self.failUnless('dom_comstat_retx' not in recs)
-        self.assertEqual(len(recs), 2)
+        self.assertEqual(len(recs), 3)
 
         # Check hub name
         self.assertEqual(recs[0]["value"]["hub"], "ichub29")
+
+        # Check the cabling record
+        crec = [r for r in recs if r["varname"] == "dom_cabling"][0]
+        self.assertEqual(crec["prio"], 2)
+        self.assertEqual(crec["value"]["value"]["2029-3"], "01B")
 
         # Get another set of monitoring records
         commDOMs = self.dor.getCommunicatingDOMs()
@@ -65,7 +70,7 @@ class MoniDOMTests(unittest.TestCase):
                 self.moniDOMs[cwd].comstat.badpkt += 8
             
         recs = hubmonitools.moniRecords(self.moniDOMs, moniDOMsPrev)
-        self.assertEqual(len(recs), 6)
+        self.assertEqual(len(recs), 7)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
         self.assertEqual(currentRec.getDOMValue("2029-3"), 101)
