@@ -153,7 +153,8 @@ def moniRecords(moniDOMs, moniDOMsPrev):
     # JSON monitoring message headers
     MONI_QUANTITIES = ["dom_pwrstat_voltage", "dom_pwrstat_current",
                        "dom_comstat_retx", "dom_comstat_badpkt",
-                       "dom_comstat_rxbytes", "dom_comstat_txbytes" ]
+                       "dom_comstat_rxbytes", "dom_comstat_txbytes",
+                       "dom_cabling"]
 
     recs = []
     for qty in MONI_QUANTITIES:
@@ -167,6 +168,10 @@ def moniRecords(moniDOMs, moniDOMsPrev):
                 rec.setDOMValue(omkey, m.voltage)
             elif (qty == "dom_pwrstat_current"):
                 rec.setDOMValue(omkey, m.current)
+            elif (qty == "dom_cabling"):
+                rec.setDOMValue(omkey, cwd)
+                # Override priority
+                rec["prio"] = 2
             elif rec.countQty:
                 if cwd not in moniDOMsPrev:
                     rec.valid = False
