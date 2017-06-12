@@ -141,11 +141,13 @@
             "waive": []
         },
         "ichub13": {
-            "comm": 60,
+            "comm": 58,
             "dor": 8,
-            "iceboot": 60,
+            "iceboot": 58,
             "quad": 15,
-            "waive": []
+            "waive": [
+                  "c4p1"
+            ]
         },
         "ichub14": {
             "comm": 60,
