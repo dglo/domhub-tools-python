@@ -210,7 +210,7 @@ class WirePair:
 
     def pwrCheck(self):
         f = file(os.path.join(self.path(), "pwr_check"))
-        return PwrCheck(f.read())
+        return PwrCheck(f.read().rstrip())
 
 
 class DOM:
