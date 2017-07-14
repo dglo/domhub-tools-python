@@ -105,19 +105,27 @@ class MoniDOMTests(unittest.TestCase):
 
         # One power check failure has already been inserted into the resources tree
         self.assertEqual(len(alerts), 1)
-        self.assertEqual(alerts[0]["value"]["condition"], "DOM power check failure on "+self.hub)
+        self.assertEqual(alerts[0]["value"]["condition"], "DOM power check failure")
+        self.assertEqual(alerts[0]["value"]["desc"],
+                         "%s: Card 0 pair 1 pwr check: plugged(ok) current(ERR_CURRENT_BELOW_LIMITS,ok) voltage(ok,ok)" % self.hub)
         
         # Fake more alerts
         self.hubconfig[self.cluster][self.hub]["comm"] = 3
         alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
+
         self.assertEqual(len(alerts), 2)
-        self.assertEqual(alerts[0]["value"]["condition"], "Unexpected number of communicating DOMs on "+self.hub)
+        self.assertEqual(alerts[0]["value"]["condition"],
+                         "Unexpected number of communicating DOMs")
+        self.assertEqual(alerts[0]["value"]["desc"],
+                         "%s: expected 3 communicating DOMs, found 4" % self.hub)
         
         self.hubconfig[self.cluster][self.hub]["comm"] = 4        
         self.hubconfig[self.cluster][self.hub]["dor"] = 1
         alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
         self.assertEqual(len(alerts), 2)
-        self.assertEqual(alerts[0]["value"]["condition"], "Unexpected number of DOR cards on "+self.hub)
+        self.assertEqual(alerts[0]["value"]["condition"], "Unexpected number of DOR cards")
+        self.assertEqual(alerts[0]["value"]["desc"],
+                         "%s: expected 1 DOR cards, found 2" % self.hub)
 
 def suite():
     return unittest.TestLoader().loadTestsFromTestCase(MoniDOMTests)
