@@ -59,7 +59,7 @@ class HubMoniAlert(dict):
     #ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
     ALERT_NOTIFIES = []
     ALERT_PRIORITY = 1
-    ALERT_PAGES = True
+    ALERT_PAGES = False
     ALERT_SERVICE = "hubmoni"
     
     def __init__(self, hub, cluster, alert_txt=None, alert_desc=None):
