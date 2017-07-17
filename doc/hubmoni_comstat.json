@@ -1,36 +1,72 @@
 {
     "prio": 3,
     "service": "hubmoni",
-    "time": "2016-01-20 20:28:50.742679",
+    "time": "2017-07-17 04:56:56.920711",
     "value": {
-        "recordingStartTime": "2016-01-20 20:28:10.591234",
-        "recordingStopTime": "2016-01-20 20:28:40.700837",
-        "value": {
-            "(2021, 2)": 0,
-            "(2021, 3)": 0,
-            "(2021, 4)": 0,
-            "(2021, 5)": 0,
-            "(2021, 6)": 0
+        "counts": {
+            "2029-1": 0,
+            "2029-2": 0,
+            "2029-3": 0,
+            "2029-4": 0
         },
-        "version": 1
+        "hub": "ichub29",
+        "recordingStartTime": "2017-07-17 04:56:41.883841",
+        "recordingStopTime": "2017-07-17 04:56:56.915661",
+        "version": 2
     },
     "varname": "dom_comstat_retx"
 }
 {
     "prio": 3,
     "service": "hubmoni",
-    "time": "2016-01-20 20:28:50.742772",
+    "time": "2017-07-17 04:56:56.920849",
     "value": {
-        "recordingStartTime": "2016-01-20 20:28:10.591234",
-        "recordingStopTime": "2016-01-20 20:28:40.700837",
-        "value": {
-            "(2021, 2)": 0,
-            "(2021, 3)": 0,
-            "(2021, 4)": 0,
-            "(2021, 5)": 0,
-            "(2021, 6)": 0
+        "counts": {
+            "2029-1": 0,
+            "2029-2": 0,
+            "2029-3": 0,
+            "2029-4": 0
         },
-        "version": 1
+        "hub": "ichub29",
+        "recordingStartTime": "2017-07-17 04:56:41.883841",
+        "recordingStopTime": "2017-07-17 04:56:56.915661",
+        "version": 2
     },
     "varname": "dom_comstat_badpkt"
+}
+{
+    "prio": 3,
+    "service": "hubmoni",
+    "time": "2017-07-17 04:56:56.920984",
+    "value": {
+        "counts": {
+            "2029-1": 0,
+            "2029-2": 0,
+            "2029-3": 0,
+            "2029-4": 0
+        },
+        "hub": "ichub29",
+        "recordingStartTime": "2017-07-17 04:56:41.883841",
+        "recordingStopTime": "2017-07-17 04:56:56.915661",
+        "version": 2
+    },
+    "varname": "dom_comstat_rxbytes"
+}
+{
+    "prio": 3,
+    "service": "hubmoni",
+    "time": "2017-07-17 04:56:56.921124",
+    "value": {
+        "counts": {
+            "2029-1": 0,
+            "2029-2": 0,
+            "2029-3": 0,
+            "2029-4": 0
+        },
+        "hub": "ichub29",
+        "recordingStartTime": "2017-07-17 04:56:41.883841",
+        "recordingStopTime": "2017-07-17 04:56:56.915661",
+        "version": 2
+    },
+    "varname": "dom_comstat_txbytes"
 }

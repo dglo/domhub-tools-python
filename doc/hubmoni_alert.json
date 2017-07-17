@@ -1,0 +1,16 @@
+{
+    "prio": 1,
+    "service": "hubmoni",
+    "t": "2017-07-17 04:56:26.856873",
+    "value": {
+        "condition": "DOM power check failure",
+        "desc": "ichub29: Card 0 pair 1 pwr check: plugged(ok) current(ERR_CURRENT_BELOW_LIMITS,ok) voltage(ok,ok)",
+        "notifies": [],
+        "pages": false,
+        "vars": {
+            "cluster": "spts",
+            "hub": "ichub29"
+        }
+    },
+    "varname": "alert"
+}
