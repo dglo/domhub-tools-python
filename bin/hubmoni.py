@@ -67,9 +67,12 @@ def keepConnecting(s, addr, logger):
 
 def getUptime():
     uptime = -1
-    with open("/proc/uptime", "r") as f:
-        vals = f.readline().split()
-        uptime = float(vals[0])
+    try:
+        with open("/proc/uptime", "r") as f:
+            vals = f.readline().split()
+            uptime = float(vals[0])
+    except IOError:
+        pass
     return uptime
 
 #-------------------------------------------------------------------
