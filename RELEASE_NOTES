@@ -1,3 +1,9 @@
+v1.5.0 -- TBD
+* disable paging
+* don't deploy test resources (like entire procfile tree)
+* fix missing resource files in deployment
+* 8145: hubmoni: update documentation of JSON quantities
+* 8147: hubmoni: add CWD reporting
 
 v1.4.9 -- 2 May 2017
 * increase moni time from 1 to 2 minutes
@@ -9,7 +15,6 @@ v1.4.9 -- 2 May 2017
 * add alert grace period after reboot
 * remove emails from user alerts
 * parallelize fab rollout
-* don't deploy test resources (like entire procfile tree)
 
 v1.4.8 -- 30 January 2017
 
