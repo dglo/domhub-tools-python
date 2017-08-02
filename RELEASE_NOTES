@@ -1,5 +1,5 @@
-v1.5.0 -- TBD
-* disable paging
+v1.5.0 -- 2 August 2017
+* disable paging for now
 * don't deploy test resources (like entire procfile tree)
 * fix missing resource files in deployment
 * 8145: hubmoni: update documentation of JSON quantities
