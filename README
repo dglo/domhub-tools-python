@@ -2,14 +2,10 @@
 hubmoni.py is a DOMHub monitoring tool that sends DOR driver monitoring
 quantities to IceCube Live as well as user alerts for DOM / DOR problems.  
 
-Can be installed on a set of DOMHub from sp[t]s-access with
+Can be installed on a set of DOMHub from pdaq@sp[t]s-access with
 
     $ fab pack deploy
 
 This will also install a cron job on the hub that will start the script.
 
-TODO:
-
-* Add "quickstatus" DOM check functionality
-* Add hubmoni config file
 
