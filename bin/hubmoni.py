@@ -23,6 +23,7 @@ import logging.handlers
 from optparse import OptionParser
 import json
 import zmq
+import pkg_resources
 
 import dor
 import hubmonitools
@@ -74,6 +75,10 @@ def getUptime():
     except IOError:
         pass
     return uptime
+
+def getVersion():
+    # Would be nice not to hard-code package name here
+    return pkg_resources.get_distribution('domhub-tools-python').version
 
 #-------------------------------------------------------------------
 def main():
@@ -157,6 +162,10 @@ def main():
     
     # Add the handler
     logger.addHandler(handler)
+
+    #-------------------------------------------------------------------
+    # Log startup message
+    logger.info("hubmoni %s" % getVersion())
     
     #-------------------------------------------------------------------
     # Try to open the 0mq socket to the moni listener

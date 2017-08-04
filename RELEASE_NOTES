@@ -1,8 +1,11 @@
+v1.5.1 -- 4 August 2017
+* 8208: Old nicknames.txt used on sps-access
+* 8209: hubmoni: report version number to log upon startup
+
 v1.5.0 -- 2 August 2017
 * 8145: hubmoni: update documentation of JSON quantities
 * 8147: hubmoni: add CWD reporting
 * 8159: don't deploy test resources (like entire procfile tree)
-* 8208: Old nicknames.txt used on sps-access
 * fix missing resource files in deployment
 * disable paging for now
 
