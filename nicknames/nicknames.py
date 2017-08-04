@@ -9,7 +9,7 @@
 import sys
 import os
 
-NICKPATHS = [".", os.environ['HOME'], "/mnt/data/testdaq", "./resources"]
+NICKPATHS = ["./resources", "/mnt/data/testdaq", ".", os.environ['HOME']]
 NICKFILE = "nicknames.txt"
 
 class NicknamesException(Exception): pass
