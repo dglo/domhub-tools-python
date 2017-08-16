@@ -35,12 +35,12 @@ class MoniDOMTests(unittest.TestCase):
     def testMoniDOMs(self):
         # Check that we have all CWDs and check 
         self.assertEqual(sorted(self.moniDOMs.keys()), ['00A', '00B', '01A', '01B'])
-        m = self.moniDOMs['00B']
-        self.assertEqual(m.dom.omkey(), "2029-1")
+        m = self.moniDOMs['00A']
+        self.assertEqual(m.dom.omkey(), "2029-2")
         self.assertEqual(m.current, 99)
         self.assertEqual(m.voltage, 89.124)
         self.failUnless(m.dom.isCommunicating())
-        self.assertEqual(m.dom.mbid(), "ac81eee613d4")
+        self.assertEqual(m.dom.mbid(), "931e24a072db")
         self.failUnless(m.pwrcheck.ok)
 
     def testMoniRecord(self):        

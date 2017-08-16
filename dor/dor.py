@@ -231,6 +231,11 @@ class DOM:
         s = f.read()
         return (len(s) > 0) and (s.find("NOT") < 0)
 
+    def isNotConfigboot(self):
+        f = file(os.path.join(self.path(), "is-not-configboot"))
+        s = f.read()
+        return (len(s) > 0) and (s.find("is out") >= 0)
+        
     def mbid(self):
         f = file(os.path.join(self.path(), "id"))
         m = re.compile(".+ ID is ([0-9a-f]+)").match(f.read())

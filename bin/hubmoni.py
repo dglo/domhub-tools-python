@@ -212,8 +212,12 @@ def main():
             logger.warn("no communicating DOMs; will keep trying");
 
         # Get a new monitoring snapshot for all communicating DOMs
+        # Exclude DOMs in configboot, we can't reliably identify them
         for dom in commDOMs:
-            mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub)
+            if dom.isNotConfigboot():
+                mDOMs[dom.cwd()] = hubmonitools.moniDOMs.HubMoniDOM(dom, hub)
+            else:
+                logger.warn("DOM %s appears to be in configboot, skipping" % dom.cwd())
 
         # Check for any alerts and send them
         uptime = getUptime()

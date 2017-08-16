@@ -1,3 +1,6 @@
+v1.5.2 -- 16 August 2017
+* 8213: hubmoni: bad key for dom_cabling for dead DOMs
+
 v1.5.1 -- 4 August 2017
 * 8208: Old nicknames.txt used on sps-access
 * 8209: hubmoni: report version number to log upon startup
