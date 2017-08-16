@@ -86,6 +86,10 @@ class DORTests(unittest.TestCase):
                         (dom.omkey() == '2029-2') and
                         (dom.prodID() == 'TP5P0955'))
 
+    def testConfigboot(self):
+        dom = self.dor.getDOM('00B')
+        self.failUnless(not dom.isNotConfigboot())
+        
     def testFPGA(self):
         fpgastr = '''FPGA registers:
 CTRL  0x40000000
