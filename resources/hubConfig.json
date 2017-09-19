@@ -7,13 +7,6 @@
             "quad": 16,
             "waive": []
         },
-        "dmice": {
-            "comm": 4,
-            "dor": 2,
-            "iceboot": 4,
-            "quad": 2,
-            "waive": []
-        },
         "mdfl1-hub1": {
             "comm": 64,
             "dor": 8,
@@ -777,6 +770,13 @@
             "dor": 8,
             "iceboot": 32,
             "quad": 16,
+            "waive": []
+        },
+        "dmice": {
+            "comm": 4,
+            "dor": 2,
+            "iceboot": 4,
+            "quad": 2,
             "waive": []
         }
     },
