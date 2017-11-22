@@ -15,15 +15,18 @@ def timedelta_total_seconds(timedelta):
 
 class MoniDOMTests(unittest.TestCase):
 
-    PREFIX = os.path.dirname(os.path.abspath(__file__))+"/ichub29_proc"
+    HUBMONICONFIG = os.path.dirname(os.path.abspath(__file__))+"/hubmoni.config"
     HUBADDRESS = "ichub29.spts.icecube.wisc.edu"
-    HUBCONFIG = os.path.dirname(os.path.abspath(__file__))+"/../resources/hubConfig.json"
-    
+        
     def setUp(self):
-        self.dor = dor.DOR(prefix=MoniDOMTests.PREFIX)
+        # HubMoni test configuration file
+        self.config = hubmonitools.HubMoniConfig(MoniDOMTests.HUBMONICONFIG)
+
+        # DOR procfiles for testing
+        self.dor = dor.DOR(prefix=self.config.DOR_PREFIX)
 
         # Configuration file for hub alerts
-        self.hubconfig = hubmonitools.HubConfig(MoniDOMTests.HUBCONFIG)
+        self.hubconfig = hubmonitools.HubConfig(self.config.HUBCONFIG)
         self.hub,self.cluster = hubmonitools.getHostCluster(MoniDOMTests.HUBADDRESS)
 
         # Get monitoring snapshot
@@ -44,7 +47,7 @@ class MoniDOMTests(unittest.TestCase):
         self.failUnless(m.pwrcheck.ok)
 
     def testMoniRecord(self):        
-        recs = hubmonitools.moniRecords(self.moniDOMs, {})
+        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, {})
 
         # Check that stats *don't* appear when there is only one record
         self.failUnless('dom_comstat_retx' not in recs)
@@ -69,7 +72,7 @@ class MoniDOMTests(unittest.TestCase):
             if (cwd == "01A"):
                 self.moniDOMs[cwd].comstat.badpkt += 8
             
-        recs = hubmonitools.moniRecords(self.moniDOMs, moniDOMsPrev)
+        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
         self.assertEqual(len(recs), 7)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
@@ -89,7 +92,7 @@ class MoniDOMTests(unittest.TestCase):
             if (cwd == "00A"):
                 self.moniDOMs[cwd].comstat.rxbytes += 162000000
 
-        recs = hubmonitools.moniRecords(self.moniDOMs, moniDOMsPrev)
+        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
 
         throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
         starttime = datetime.strptime(throughputRec["value"]["recordingStartTime"],
@@ -101,7 +104,7 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(delta_sec, 5)
 
     def testAlerts(self):
-        alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
+        alerts = hubmonitools.moniAlerts(self.config, self.dor, self.hubconfig, self.hub, self.cluster)
 
         # One power check failure has already been inserted into the resources tree
         self.assertEqual(len(alerts), 1)
@@ -111,7 +114,7 @@ class MoniDOMTests(unittest.TestCase):
         
         # Fake more alerts
         self.hubconfig[self.cluster][self.hub]["comm"] = 3
-        alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
+        alerts = hubmonitools.moniAlerts(self.config, self.dor, self.hubconfig, self.hub, self.cluster)
 
         self.assertEqual(len(alerts), 2)
         self.assertEqual(alerts[0]["value"]["condition"],
@@ -121,7 +124,7 @@ class MoniDOMTests(unittest.TestCase):
         
         self.hubconfig[self.cluster][self.hub]["comm"] = 4        
         self.hubconfig[self.cluster][self.hub]["dor"] = 1
-        alerts = hubmonitools.moniAlerts(self.dor, self.hubconfig, self.hub, self.cluster)
+        alerts = hubmonitools.moniAlerts(self.config, self.dor, self.hubconfig, self.hub, self.cluster)
         self.assertEqual(len(alerts), 2)
         self.assertEqual(alerts[0]["value"]["condition"], "Unexpected number of DOR cards")
         self.assertEqual(alerts[0]["value"]["desc"],

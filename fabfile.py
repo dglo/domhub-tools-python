@@ -51,17 +51,24 @@ def deploy():
         run('rm -rf /tmp/%s /tmp/%s.tar.gz' % (dist, dist))
 
     # Install the configuration files
-    put('resources/hubConfig.json', 'hubConfig.json')
+    config()
 
     # Install the cron job
     installCronjob("hubmoni cron", "*/10 * * * * %s" % HUBMONICMD)
 
 @hosts(env.hosts)
+def config():
+    # Install the configuration files
+    put('resources/hubConfig.json', 'hubConfig.json')
+    put('resources/hubmoni.config', 'hubmoni.config')
+    
+@hosts(env.hosts)
 def stop():
     run('ps aux | grep %s | grep -v grep | awk \'{print $2}\' | xargs -r kill -TERM' 
         % os.path.basename(HUBMONICMD))
 
-# This doesn't work (see http://www.fabfile.org/faq.html#why-can-t-i-run-programs-in-the-background-with-it-makes-fabric-hang)
+# This doesn't work
+# (see http://www.fabfile.org/faq.html#why-can-t-i-run-programs-in-the-background-with-it-makes-fabric-hang)
 #def start():
 #    run('nohup %s &' % HUBMONICMD)
 

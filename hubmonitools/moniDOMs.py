@@ -20,25 +20,22 @@ class HubMoniDOM(object):
 class HubMoniRecord(dict):
     """Class containing a JSON monitoring record for a particular quantity,
     including all DOMs on the hub."""    
-    MONI_SERVICE = "hubmoni"    
-    MONI_PRIORITY = 3
-    MONI_VERSION = 2
 
-    def __init__(self, quantity, countQty):
+    def __init__(self, config, quantity, countQty):
         self.valid = True
         self.countQty = countQty
         dict.__init__(self,
-                      { "service" : HubMoniRecord.MONI_SERVICE,
+                      { "service" : config.MONI_SERVICE,
                         "varname" : quantity,
-                        "prio" : HubMoniRecord.MONI_PRIORITY,
+                        "prio" : config.MONI_PRIORITY,
                         "time" : datetime.datetime.utcnow().__str__(),                        
                         })
         if countQty:
             self["value"] = {"counts": {},
-                             "version" : HubMoniRecord.MONI_VERSION }
+                             "version" : config.MONI_VERSION }
         else: 
             self["value"] = {"value": {},
-                             "version" : HubMoniRecord.MONI_VERSION }
+                             "version" : config.MONI_VERSION }
 
     def setDOMValue(self, omkey, val):
         if self.countQty:
@@ -56,31 +53,25 @@ class HubMoniRecord(dict):
         return json.dumps(self, sort_keys=True, indent=4, separators=(',', ': '))
     
 class HubMoniAlert(dict):
-    #ALERT_NOTIFIES = ["jkelley@icecube.wisc.edu"]
-    ALERT_NOTIFIES = []
-    ALERT_PRIORITY = 1
-    ALERT_PAGES = False
-    ALERT_SERVICE = "hubmoni"
-    
-    def __init__(self, hub, cluster, alert_txt=None, alert_desc=None):
+    def __init__(self, config, hub, cluster, alert_txt=None, alert_desc=None):
         dict.__init__(self,
-                      { "service" : HubMoniAlert.ALERT_SERVICE,
+                      { "service" : config.ALERT_SERVICE,
                         "varname" : "alert",
                         "t" : datetime.datetime.utcnow().__str__(),
-                        "prio" : HubMoniAlert.ALERT_PRIORITY,
-                        "value" : { "pages"     : HubMoniAlert.ALERT_PAGES,
+                        "prio" : config.ALERT_PRIORITY,
+                        "value" : { "pages"     : config.ALERT_PAGES,
                                     "vars"      : { "hub" : hub, "cluster" : cluster },
                                     "notifies"  : []
                                     }
                         })
         if alert_txt is not None and alert_desc is not None:
-            self.setAlert(alert_txt, alert_desc)
+            self.setAlert(config.ALERT_NOTIFIES, alert_txt, alert_desc)
 
-    def setAlert(self, alert_txt, alert_desc):
+    def setAlert(self, notifies, alert_txt, alert_desc):
         """Set the alert text and description (other fields are common)"""
         self["value"]["condition"] = alert_txt
         self["value"]["desc"] = alert_desc
-        for receiver in HubMoniAlert.ALERT_NOTIFIES:            
+        for receiver in notifies:
             self["value"]["notifies"].append({"receiver": receiver,
                                               "notifies_header": "HubMoni alert: " + alert_txt,
                                               "notifies_txt": alert_desc })        
@@ -107,7 +98,7 @@ class HubMoniAlert(dict):
     def __str__(self):
         return json.dumps(self, sort_keys=True, indent=4, separators=(',', ': '))
 
-def moniAlerts(dor, hubConfig, hub, cluster):
+def moniAlerts(config, dor, hubConfig, hub, cluster):
     """Send user alerts to I3Live for problematic conditions"""
     conf = hubConfig.getHub(hub, cluster)
 
@@ -117,7 +108,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
     if (len(dor.cards) != conf["dor"]):
         alert_txt = "Unexpected number of DOR cards"
         alert_desc = "%s: expected %d DOR cards, found %d" % (hub, conf["dor"], len(dor.cards))
-        alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
+        alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
         alerts.append(alert)
         
     # Check number of communicating DOMs
@@ -125,7 +116,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
         alert_txt = "Unexpected number of communicating DOMs"
         alert_desc = "%s: expected %d communicating DOMs, found %d" % \
             (hub, conf["comm"], len(dor.getCommunicatingDOMs()))
-        alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)        
+        alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)        
         alerts.append(alert)
 
     # Check DOR-driver pwr_check conditions (vs. waivers)
@@ -138,7 +129,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
                 alert_txt = "DOM power check failure"
                 alert_desc = "%s: " % hub
                 alert_desc += moni.pwrcheck.text
-                alert = HubMoniAlert(hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
+                alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
                 pwrFail = True
             else:
                 alert.appendAlert(moni.pwrcheck.text)
@@ -147,7 +138,7 @@ def moniAlerts(dor, hubConfig, hub, cluster):
 
     return alerts
 
-def moniRecords(moniDOMs, moniDOMsPrev):
+def moniRecords(config, moniDOMs, moniDOMsPrev):
     """Construct the JSON monitoring records from the monitoring snapshots"""
 
     # JSON monitoring message headers
@@ -158,7 +149,7 @@ def moniRecords(moniDOMs, moniDOMsPrev):
 
     recs = []
     for qty in MONI_QUANTITIES:
-        rec = HubMoniRecord(qty, countQty=("comstat" in qty))
+        rec = HubMoniRecord(config, qty, countQty=("comstat" in qty))
         for cwd in moniDOMs:
             # Most recent monitoring snapshot for this DOM
             m = moniDOMs[cwd]
