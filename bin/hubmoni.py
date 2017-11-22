@@ -30,28 +30,35 @@ import hubmonitools
 
 #-------------------------------------------------------------------
 # Program files
-PIDFILE = "/tmp/hubmoni.pid"
-LOGFILE = "/tmp/hubmoni.log"
+#PIDFILE = "/tmp/hubmoni.pid"
+#LOGFILE = "/tmp/hubmoni.log"
+
+# Hubmoni configuration file
+HUBMONICONFIG = os.environ['HOME']+"/hubmoni.config"
 
 # Hub configuration file
-HUBCONFIG = os.environ['HOME']+"/hubConfig.json"
+#HUBCONFIG = os.environ['HOME']+"/hubConfig.json"
 
 # Default monitoring period, in seconds
-MONI_PERIOD = 120
+#MONI_PERIOD = 120
 
 # Default monitoring reporting period, in seconds
-MONI_REPORT_PERIOD = 3600
+#MONI_REPORT_PERIOD = 3600
 
 # How long to wait before reattempting 
 # socket connection, in seconds
-SOCKET_WAIT = 60
+#SOCKET_WAIT = 60
 
 # Default ZMQ listener for reporting
-ZMQ_HOSTNAME = "expcont"
-ZMQ_PORT = 6668
+#ZMQ_HOSTNAME = "expcont"
+#ZMQ_PORT = 6668
 
 # Grace period for alert after reboot, seconds
-ALERT_GRACE_PERIOD = 600
+#ALERT_GRACE_PERIOD = 600
+
+# In simulation mode, how many times to report
+# records before exiting
+#MAX_SIMLOOP_CNT = 5
 
 #-------------------------------------------------------------------
 def keepConnecting(s, addr, logger):
@@ -85,48 +92,48 @@ def main():
 
     # Parse command line arguments
     parser = OptionParser()
-    parser.add_option("-H", "--host", dest = "hostname",
-                      help = "monitoring listener hostname", default = ZMQ_HOSTNAME)
-    parser.add_option("-p", "--port", dest = "port", type="int",
-                      help = "monitoring listener port number", default = ZMQ_PORT)
-    parser.add_option("-d", "--dor", dest = "dor_prefix", default = "/proc/driver/domhub",
-                      help = "DOR procfile prefix")
-    parser.add_option("-c", "--config", dest="hubconfig_file",
-                      help="hub configuration file", default=HUBCONFIG)    
-    parser.add_option("-t", "--time", dest = "moni_period", type="float",
-                      help = "time between monitoring checks, in seconds", default = MONI_PERIOD)
-    parser.add_option("-r", "--report", dest = "report_period", type="float",
-                      help = "time between monitoring reports, in seconds", default = MONI_REPORT_PERIOD)
+#    parser.add_option("-H", "--host", dest = "hostname",
+#                      help = "monitoring listener hostname", default = ZMQ_HOSTNAME)
+#    parser.add_option("-p", "--port", dest = "port", type="int",
+#                      help = "monitoring listener port number", default = ZMQ_PORT)
+#    parser.add_option("-d", "--dor", dest = "dor_prefix", default = "/proc/driver/domhub",
+#                      help = "DOR procfile prefix")
+    parser.add_option("-c", "--config", dest="config_file",
+                      help="hubmoni configuration file", default=HUBMONICONFIG)
+#    parser.add_option("-c", "--hubconfig", dest="hubconfig_file",
+#                      help="hub configuration file", default=HUBCONFIG)
+#    parser.add_option("-t", "--time", dest = "moni_period", type="float",
+#                      help = "time between monitoring checks, in seconds", default = MONI_PERIOD)
+#    parser.add_option("-r", "--report", dest = "report_period", type="float",
+#                      help = "time between monitoring reports, in seconds", default = MONI_REPORT_PERIOD)
     parser.add_option("-s", "--simulate", action="store_true", dest="simulate",
-                      help="don't send JSON data", default=False)    
+                      help="simulation mode for testing", default=False)
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
                       help="print monitoring records to STDOUT", default=False)
     (options, args) = parser.parse_args()
 
-    hostname = options.hostname
-    port = options.port
-    dor_prefix = options.dor_prefix
+    # Read configuration file
+    config = hubmonitools.HubMoniConfig(options.config_file)
+
+    # Command-line only options
     simulate = options.simulate
     verbose = options.verbose
-    report_period = options.report_period
-    moni_period = options.moni_period
-    hubconfig_file = options.hubconfig_file
 
     #-------------------------------------------------------------------
     # Before doing anything, create a PID file so we only run this once
     pid = str(os.getpid())
 
     is_running = False
-    if os.path.isfile(PIDFILE):
+    if os.path.isfile(config.PIDFILE):
         # Check if PID is still running
-        oldpid = int(open(PIDFILE).read())
+        oldpid = int(open(config.PIDFILE).read())
         try:
             os.kill(oldpid, 0)
         except OSError:
             # It must have been left lying around
             if verbose:
                 sys.stderr.write("Old lockfile found but process is dead, removing.\n")
-            os.unlink(PIDFILE)
+            os.unlink(config.PIDFILE)
         else:
             is_running = True
 
@@ -135,14 +142,14 @@ def main():
             sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
         sys.exit(0)
     else:
-        file(PIDFILE, 'w').write(pid)
+        file(config.PIDFILE, 'w').write(pid)
     
     # Register CTRL-C
     signal.signal(signal.SIGINT, lambda signal, frame: sys.exit(0))
     signal.signal(signal.SIGTERM, lambda signal, frame: sys.exit(0))
 
     # Clean up at exit
-    atexit.register(lambda : os.unlink(PIDFILE))
+    atexit.register(lambda : os.unlink(config.PIDFILE))
 
     #-------------------------------------------------------------------
     # Set up logging
@@ -154,7 +161,7 @@ def main():
         logger.setLevel(logging.INFO)
 
     # Rotate through files
-    handler = logging.handlers.RotatingFileHandler(LOGFILE, maxBytes=100000, backupCount=3)
+    handler = logging.handlers.RotatingFileHandler(config.LOGFILE, maxBytes=100000, backupCount=3)
 
     # Set formatting of log messages
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -171,28 +178,28 @@ def main():
     # Try to open the 0mq socket to the moni listener
     context = zmq.Context()
     s = context.socket(zmq.PUSH)
-    addr = "tcp://%s:%d" % (hostname, port)
-    if not simulate:
+    addr = "tcp://%s:%d" % (config.ZMQ_HOSTNAME, config.ZMQ_PORT)
+    if not simulate or not verbose:
         keepConnecting(s,addr,logger)
     else:
-        logger.info("SIMULATION MODE: no data will be sent")
+        logger.info("SIMULATION MODE: data sent only if verbose=False")
 
     # Register SIGINT to exit
     signal.signal(signal.SIGINT, lambda signum, frame: sys.exit(0))
     
     # DOR driver interface
-    dorDriver = dor.DOR(prefix = dor_prefix)
+    dorDriver = dor.DOR(prefix = config.DOR_PREFIX)
     # Check that we've at least got some cables plugged in
     if (len(dorDriver.getAllDOMs()) == 0):
         logger.error("no DOMs found at all; exiting!")
         sys.exit(-1)    
 
     # Configuration file for hub alerts
-    if not os.path.isfile(hubconfig_file):
-        logger.error("Couldn't open hub configuration file %s; exiting!" % hubconfig_file)
+    if not os.path.isfile(config.HUBCONFIG):
+        logger.error("Couldn't open hub configuration file %s; exiting!" % config.HUBCONFIG)
         sys.exit(-1)
 
-    hubconfig = hubmonitools.HubConfig(hubconfig_file)
+    hubconfig = hubmonitools.HubConfig(config.HUBCONFIG)
     if not simulate:
         hub,cluster = hubmonitools.getHostCluster()
     else:
@@ -205,7 +212,8 @@ def main():
     mDOMsPrev = {}
     activeAlerts = []
     newAlerts = []
-
+    simLoop = 0
+    
     while True:
         commDOMs = dorDriver.getCommunicatingDOMs()
         if not commDOMs:
@@ -221,9 +229,9 @@ def main():
 
         # Check for any alerts and send them
         uptime = getUptime()
-        if (uptime < 0) or (uptime > ALERT_GRACE_PERIOD):
+        if (uptime < 0) or (uptime > config.ALERT_GRACE_PERIOD):
             try:
-                newAlerts = hubmonitools.moniDOMs.moniAlerts(dorDriver, hubconfig, hub, cluster)
+                newAlerts = hubmonitools.moniDOMs.moniAlerts(config, dorDriver, hubconfig, hub, cluster)
             except AttributeError:
                 logger.error("Malformed alerts... driver unloaded?!")
 
@@ -237,7 +245,7 @@ def main():
             if alert not in activeAlerts:
                 if verbose:
                     print alert
-                if not simulate:
+                if not simulate or not verbose:
                     try:
                         s.send_json(alert, flags=zmq.NOBLOCK)
                         logger.info("sent %dB moni alert" % (len(json.dumps(alert))))
@@ -250,12 +258,12 @@ def main():
         # If it's time, create the monitoring records and send them
         td = datetime.datetime.utcnow() - lastSentTime
         secSinceLastMoni = td.seconds + (td.days * 24 * 3600)
-        if (secSinceLastMoni >= report_period):
+        if (secSinceLastMoni >= config.MONI_REPORT_PERIOD):
 
             # Construct monitoring records and send them
             recs = []
             try:
-                recs = hubmonitools.moniDOMs.moniRecords(mDOMs, mDOMsPrev) 
+                recs = hubmonitools.moniDOMs.moniRecords(config, mDOMs, mDOMsPrev) 
             except AttributeError:
                 logger.error("Malformed moni records... driver unloaded?!")
             
@@ -263,21 +271,26 @@ def main():
                 if verbose:
                     print rec
 
-                if not simulate:
+                if not simulate or not verbose:
                     try:
                         s.send_json(rec, flags=zmq.NOBLOCK)
                         logger.info("sent %dB moni record" % (len(json.dumps(rec))))
                     except zmq.ZMQError:
                         logger.error("couldn't send JSON to socket.", exc_info=sys.exc_info())
                         keepConnecting(s,addr,logger)
-
+                    
             # Keep track of previous snapshot since some quantities
             # are a difference between the two
             mDOMsPrev = mDOMs
             mDOMs = {}
             lastSentTime = datetime.datetime.utcnow()
-            
-        time.sleep(moni_period)
+
+            if simulate:
+                simLoop += 1
+                if simLoop == config.MAX_SIMLOOP_CNT:
+                    sys.exit(0)
+
+        time.sleep(config.MONI_PERIOD)
 
 if __name__ == "__main__":
     main()

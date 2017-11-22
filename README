@@ -8,4 +8,8 @@ Can be installed on a set of DOMHub from pdaq@sp[t]s-access with
 
 This will also install a cron job on the hub that will start the script.
 
+Configuration files can be updated without redeploying the entire package,
+with
+
+    $ fab config restart
 
