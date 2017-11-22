@@ -2,6 +2,12 @@
 
 from setuptools import setup, find_packages
 
+# Workaround for Python multiprocessing atexit bug
+try:
+    import multiprocessing
+except ImportError:
+    pass
+
 setup(name='domhub-tools-python',
       version='1.6.0',
       description='IceCube DOMHub Monitoring',

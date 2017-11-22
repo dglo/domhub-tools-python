@@ -26,10 +26,6 @@ class HubMoniConfig(dict):
         # Alert pages WOs or not
         "ALERT_PAGES" : False,
 
-        # Hubmoni internal file locations
-        "PIDFILE": "/tmp/hubmoni.pid",
-        "LOGFILE": "/tmp/hubmoni.log",
-
         # Hub configuration file
         "HUBCONFIG" : os.environ['HOME']+"/hubConfig.json",
 
