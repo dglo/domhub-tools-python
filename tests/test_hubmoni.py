@@ -33,16 +33,18 @@ class ServerThread(threading.Thread):
 # HubMoni tests
 class HubMoniTests(unittest.TestCase):
     CONFIGFILE = os.path.dirname(os.path.abspath(__file__))+"/hubmoni.config"
-    BINDIR = os.path.dirname(os.path.abspath(__file__))+"/../bin"
-    
+    ROOTDIR = os.path.abspath(os.path.dirname(os.path.abspath(__file__))+"/..")
+
     def setUp(self):
         self.config = hubmonitools.HubMoniConfig(HubMoniTests.CONFIGFILE)
         server = ServerThread(self.config.ZMQ_PORT)
         server.start()
 
-        cmd = [HubMoniTests.BINDIR+"/hubmoni.py",
-               "-c", HubMoniTests.CONFIGFILE, "-s"]
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # Hack to fix up PYTHONPATH
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -s" % 
+               (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+                             cwd=HubMoniTests.ROOTDIR, shell=True)
         if p:
             stdout, stderr = p.communicate()
 
