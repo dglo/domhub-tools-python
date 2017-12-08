@@ -1,0 +1,122 @@
+
+HubMoni Users' Guide v1.0
+-------------------------
+
+John Kelley, WIPAC
+jkelley@icecube.wisc.edu
+
+
+1. Introduction
+
+HubMoni is a Python DOMHub monitoring tool running on each DOMHub machine.
+It has two primary functions: first, to collect monitoring information on
+the DOMs and send these data to IceCube Live; and second, to monitor for
+problems with DOM communications or power and send an alert to Live.  This
+alert may page the winterovers based on the configuration.
+
+
+2. Installation
+
+HubMoni is a part of the domhub-tools-python package, located in SVN at
+
+  http://code.icecube.wisc.edu/daq/projects/domhub-tools-python
+
+The code should be checked out as the pdaq user on sp[t]s-access.
+Installation to the hubs is via Python Fabric.  To install a new version
+from access to the hubs, change into the domhub-tools-python directory and
+execute 
+
+  $ fab pack deploy
+
+This will deploy the new version to the testdaq user area on the hubs, stop
+any existing hubmoni processes, and, if needed, install a cronjob in the
+testdaq crontab that will restart hubmoni every 10 minutes if needed.
+
+The domhub-tools-python package also includes Python libraries to interface
+with the DOR driver.  It also includes command-line tools that will
+replace the "status" and "quickstatus" commands in a future version.
+
+
+3. Configuration
+
+HubMoni configuration is via two files, located in the resources/
+directory in the project directory, hubConfig.json and hubmoni.config.
+These configuration files are installed to the testdaq user home directory
+on each hub.
+
+hubConfig.json is a JSON dictionary that contains information for each
+DOMHub.  The top-level dict entry is the cluster ("sps", "spts", or
+"other").  Within the cluster, each hub has its own dictionary, such as:
+
+        "ichub05": {
+            "comm": 58,
+            "dor": 8,
+            "iceboot": 58,
+            "quad": 15,
+            "waive": [
+                "c2p2"
+            ]
+        },
+
+where 
+
+ - "ichub05" is the hub hostname; 
+ - "comm" is the number of communicating DOMs to expect; 
+ - "dor" is the number of DOR cards installed; 
+ - "iceboot" is the number of DOMs that can transition to IceBoot; and
+ - "quad" is the number of quad patch cables plugged in.
+
+The "waive" entry can be used to waive power check failures on a wire pair
+as flagged by the DOR device driver and reported by quickstatus.  In the
+example above, DOR card 2 pair 2 is waived of all power check errors.
+
+A hub configuration may need to be changed if, for example, DOMs fail or
+are temporarily disconnected.  For temporary changes, the copy on the hub
+in ~testdaq/hubConfig.json can be modified, but then the hubmoni.py process
+must be killed (cron will restart it).  Permanent changes should be made to
+the configuration file in the resources/ directory and can be installed to
+the hubs via
+
+    $ fab config restart
+
+including the hubmoni restart.  The project maintainer should be notified
+as well so that the change is propagated into SVN.
+
+The "hubmoni.config" file can be used to override certain default
+parameters for the HubMoni program.  This file is a JSON-like dictionary
+that also can include comment lines starting with '#'.  For example, the
+parameter  
+
+    "ALERT_PAGES" : true
+
+can be changed to turn on and off HubMoni alert paging.  The modified
+configuration must be installed the same way as the hubConfig file, with
+
+   $ fab config restart
+
+from sp[t]s-access.
+
+
+4. Operation
+
+HubMoni's monitoring data are transmitted to LiveControl via ZMQ.  These
+data, such as DOM voltage, current, and communication statistics, are
+collected transparently and are displayed on the DOM pages in Live.
+
+If HubMoni detects a difference between the hub status and hubConfig.json,
+or detects a power check failure in the DOR driver, it will send a user
+alert to IceCube Live.  Live will then send an e-mail to the recipients in
+the ALERT_NOTIFIES configuration variable, and will generate a page file
+picked up by Nagios, if the ALERT_PAGES variable is true.
+
+The page condition will NOT clear automatically.  After the condition is
+fixed, it must be cleared on expcont using the command 
+
+    $ livecmd respond all
+
+Note that unlike the previous DOMHub paging system, changes in DOM cabling
+(swapping a quad, for example), will no longer page the WOs, since this
+doesn't technically affect data-taking.  However, HubMoni will send the
+cabling information to Live, and Live will alert the operations group of
+the change.  
+
