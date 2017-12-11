@@ -20,11 +20,11 @@ class MoniConfigTests(unittest.TestCase):
                         (config.ZMQ_PORT == 6668))
 
     def testConfigFile(self):
-        config = hubmonitools.HubMoniConfig(MoniConfigTests.PREFIX+"/../resources/hubmoni.config")
+        config = hubmonitools.HubMoniConfig(MoniConfigTests.PREFIX+"/hubmoni.config")
         # Make sure defaults are still there
         self.failUnless((config.MONI_SERVICE == "hubmoni") and
                         (config.ALERT_SERVICE == "hubmoni"))
         # Check overrides
         self.failUnless((config.ALERT_PAGES == True) and
-                        (config.ALERT_NOTIFIES == ["run_coordination@icecube.wisc.edu"]))
+                        (config.ALERT_NOTIFIES == ["bogus@bogus.com"]))
         
