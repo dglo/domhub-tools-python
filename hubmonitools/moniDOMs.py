@@ -106,14 +106,14 @@ def moniAlerts(config, dor, hubConfig, hub, cluster):
 
     # Check number of DOR cards
     if (len(dor.cards) != conf["dor"]):
-        alert_txt = "Unexpected number of DOR cards"
+        alert_txt = "%s: unexpected number of DOR cards" % hub
         alert_desc = "%s: expected %d DOR cards, found %d" % (hub, conf["dor"], len(dor.cards))
         alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
         alerts.append(alert)
         
     # Check number of communicating DOMs
     if (len(dor.getCommunicatingDOMs()) != conf["comm"]):
-        alert_txt = "Unexpected number of communicating DOMs"
+        alert_txt = "%s: unexpected number of DOMs" % hub
         alert_desc = "%s: expected %d communicating DOMs, found %d" % \
             (hub, conf["comm"], len(dor.getCommunicatingDOMs()))
         alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)        
@@ -126,7 +126,7 @@ def moniAlerts(config, dor, hubConfig, hub, cluster):
         # All power check failures are equivalent at the moment
         if not moni.pwrcheck.ok and not hubConfig.isWaived(hub, cluster, int(dom.card), int(dom.pair)):
             if not pwrFail:
-                alert_txt = "DOM power check failure"
+                alert_txt = "%s: DOM power check failure" % hub
                 alert_desc = "%s: " % hub
                 alert_desc += moni.pwrcheck.text
                 alert = HubMoniAlert(config, hub, cluster, alert_txt=alert_txt, alert_desc=alert_desc)
