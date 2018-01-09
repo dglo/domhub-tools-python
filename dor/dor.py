@@ -219,6 +219,7 @@ class DOM:
         self.id = id.upper()
         self.pair = pair
         self.card = pair.card
+        self.f = None
 
     def path(self):        
         return os.path.join(self.pair.path(), "dom"+self.id)
@@ -289,33 +290,44 @@ class DOM:
             p += 1
         return p
 
-    def send(self, f, d):
-        os.write(f, d)
+    def write(self, d):
+        os.write(self.f, d)
 
-    def read(self, f):
+    def read(self):
         done = False
         resp = ""
         sleep(0.2)
         while not done:
             try:
-                resp += os.read(f, DEV_BLOCKSIZE)
+                resp += os.read(self.f, DEV_BLOCKSIZE)
                 sleep(0.1)
             except:
                 done = True
         return resp
+
+    def open(self):
+        if self.f is None:
+            try:
+                self.f = os.open(self.dev(), os.O_RDWR | os.O_NONBLOCK)
+            except OSError:
+                self.f = None
+        
+    def close(self):
+        if self.f is not None:
+            os.close(self.f)
+        self.f = None
 
     def state(self):
         state = "unknown"
         if not self.isCommunicating():
             return "nocomm"
 
-        try:
-            f = os.open(self.dev(), os.O_RDWR | os.O_NONBLOCK)
-        except OSError:
+        self.open()
+        if self.f is None:
             return "error"
 
-        self.send(f, DOMAPP_REQUEST_ID)
-        resp = self.read(f)
+        self.write(DOMAPP_REQUEST_ID)
+        resp = self.read()
 
         # Check for correct domapp response
         if (len(resp) == DOMAPP_ID_RESPONSE_LEN) and \
@@ -323,14 +335,14 @@ class DOM:
             state = "domapp"
         else:
             # Now check for iceboot / configboot
-            self.send(f, '\r')
-            resp = self.read(f)
+            self.write('\r')
+            resp = self.read()
             if "> " in resp:
                 state = "iceboot"
             elif "# " in resp:
                 state = "configboot"
 
-        os.close(f)
+        self.close()
         return state
 
 class InvalidPwrCheckException(Exception):
