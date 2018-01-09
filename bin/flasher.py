@@ -70,11 +70,27 @@ class IceBoot():
         self.send("disableFB")
         self.expect()
 
+#--------------
+# Courtesy of StackExchange
+
+class GracefulKiller:
+  kill_now = False
+  def __init__(self):
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+  def exit_gracefully(self,signum, frame):
+    self.kill_now = True
+
+#--------------
+
 def main(): 
     # Get command line arguments
     if len(sys.argv) < 2:
         print "Usage: %s CWD <CWD ...>" % sys.argv[0]
         sys.exit(0)
+
+    killer = GracefulKiller()
 
     # Get DOR interface to the DOMs
     dorDriver = dor.DOR()
@@ -117,11 +133,11 @@ def main():
     print "*** FLASHING %d DOM(s) FOR %d SECONDS ***" % (len(iceboots), FLASHER_TIME_SEC)
     for ib in iceboots:
         ib.flasherStart()
-        
-    try:
-        time.sleep(FLASHER_TIME_SEC)
-    except:
-        pass
+
+    flashTime = 0
+    while (flashTime < FLASHER_TIME_SEC) and not killer.kill_now:
+        time.sleep(1)
+        flashTime = flashTime+1
 
     print "Stopping flashing and shutting down flasherboard..."
     for ib in iceboots:
