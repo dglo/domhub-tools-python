@@ -1,3 +1,7 @@
+v1.6.2 -- 9 January 2018
+* improve documentation
+* 8342: Add script to control flasherboards from IceBoot
+
 v1.6.1 -- 11 December 2017
 * add users' guide
 * re-enable paging
