@@ -39,10 +39,10 @@ replace the "status" and "quickstatus" commands in a future version.
 
 3. Configuration
 
-HubMoni configuration is via two files, located in the resources/
-directory in the project directory, hubConfig.json and hubmoni.config.
-These configuration files are installed to the testdaq user home directory
-on each hub.
+HubMoni configuration is via two files, hubConfig.json and hubmoni.config.
+The default files are located in the resources/ subdirectory of the
+domhub-tools-python project directory. These configuration files are
+installed to the testdaq user home directory on each hub.
 
 hubConfig.json is a JSON dictionary that contains information for each
 DOMHub.  The top-level dict entry is the cluster ("sps", "spts", or
