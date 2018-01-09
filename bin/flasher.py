@@ -6,6 +6,7 @@
 #
 import sys
 import time
+import signal
 import dor
 
 # Fix me add command-line arguments
@@ -36,7 +37,10 @@ class IceBoot():
 
     def expect(self, s=None):
         resp = self.dom.read().split('\r\n')
-        respOK = (resp[-1] == IceBoot.PROMPT) and ((s is None) or (resp[1] == s))
+        if s is None:
+            respOK = (resp[-1] == IceBoot.PROMPT) and (len(resp) == 2)
+        else:
+            respOK = (resp[-1] == IceBoot.PROMPT) and (resp[1] == s)
         if not respOK:
             print "DEBUG",s,resp
             raise UnexpectedDOMResponse('Bad DOM response %s' % resp[1])
@@ -113,8 +117,11 @@ def main():
     print "*** FLASHING %d DOM(s) FOR %d SECONDS ***" % (len(iceboots), FLASHER_TIME_SEC)
     for ib in iceboots:
         ib.flasherStart()
-    
-    time.sleep(FLASHER_TIME_SEC)
+        
+    try:
+        time.sleep(FLASHER_TIME_SEC)
+    except:
+        pass
 
     print "Stopping flashing and shutting down flasherboard..."
     for ib in iceboots:
