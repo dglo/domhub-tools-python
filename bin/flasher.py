@@ -24,7 +24,7 @@ class UnexpectedDOMResponse(Exception):
 
 # Class for interfacing with a DOM in IceBoot
 # FIX ME: make this more general and move it elsewhere
-class IceBoot(): 
+class IceBoot(object):
     PROMPT = '> '
     def __init__(self, dom):
         if dom.state() != "iceboot":
@@ -73,7 +73,7 @@ class IceBoot():
 #--------------
 # Courtesy of StackExchange
 
-class GracefulKiller:
+class GracefulKiller(object):
   kill_now = False
   def __init__(self):
     signal.signal(signal.SIGINT, self.exit_gracefully)
