@@ -13,3 +13,14 @@ with
 
     $ fab config restart
 
+--
+
+For standalone installation on, for example, a lab DOMHub, the "fab"
+command is not available.  Instead, on the hub itself as the testdaq user,
+check out this repository and execute
+
+    $ python setup.py install --user
+
+from the top level directory.  This doesn't start hubmoni itself but does
+install the supporting Python libraries and scripts.
+
