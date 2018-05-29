@@ -130,7 +130,7 @@
             "waive": []
         },
         "ichub13": {
-            "comm": 59,
+            "comm": 60,
             "dor": 8,
             "iceboot": 59,
             "quad": 15,
@@ -741,7 +741,7 @@
             "dor": 8,
             "iceboot": 17,
             "quad": 8,
-            "waive": []
+            "waive": [ "c4p1" ]
         },
         "ithub09": {
             "comm": 32,
