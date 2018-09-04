@@ -737,11 +737,14 @@
             "waive": []
         },
         "ithub08": {
-            "comm": 17,
+            "comm": 16,
             "dor": 8,
-            "iceboot": 17,
+            "iceboot": 16,
             "quad": 8,
-            "waive": [ "c4p1" ]
+            "waive": [
+                "c4p1",
+                "c3p3"
+            ]
         },
         "ithub09": {
             "comm": 32,
