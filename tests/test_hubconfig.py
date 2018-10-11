@@ -34,7 +34,8 @@ class HubConfigTests(unittest.TestCase):
         self.failUnless("ichub21" in hubs)
 
     def testWaives(self):
-        self.failUnless(self.conf.isWaived("ichub09", "sps", 1, 3) and not
+        self.failUnless(self.conf.isWaived("ichub07", "sps", 4, 1) and 
+                        self.conf.isWaived("ichub07", "sps", 5, 2) and not
                         self.conf.isWaived("ichub13", "sps", 2, 2))        
 
 def suite():
