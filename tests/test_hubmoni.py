@@ -39,7 +39,9 @@ class HubMoniTests(unittest.TestCase):
         self.config = hubmonitools.HubMoniConfig(HubMoniTests.CONFIGFILE)
         server = ServerThread(self.config.ZMQ_PORT)
         server.start()
+        time.sleep(1)
 
+        # Launch hubmoni
         # Hack to fix up PYTHONPATH
         cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -s" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
@@ -74,6 +76,3 @@ class HubMoniTests(unittest.TestCase):
         self.failUnless((len(pwrstat_recs) == (self.config.MAX_SIMLOOP_CNT*2)) and
                         (len(comstat_recs) == (self.config.MAX_SIMLOOP_CNT-1)*4) and
                         (len(cabling_recs) == (self.config.MAX_SIMLOOP_CNT)))
-
-
-

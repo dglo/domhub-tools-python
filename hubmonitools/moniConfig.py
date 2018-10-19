@@ -49,7 +49,10 @@ class HubMoniConfig(dict):
         # Grace period for alert after reboot, seconds
         "ALERT_GRACE_PERIOD" : 600,
 
-        # In simulation mode, how many times to report
+        # Maximum pause time, minutes
+        "MAX_PAUSE_TIME" : 120,
+
+        # In testing mode, how many times to report
         # records before exiting
         "MAX_SIMLOOP_CNT" : 2
         }

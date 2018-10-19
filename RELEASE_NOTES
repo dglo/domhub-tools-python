@@ -1,3 +1,7 @@
+v1.7.0 -- TBD
+* 8300: hubmoni: add cluster to user alert notifications
+* The_Penguin is no longer dead, so fix waiver test
+
 v1.6.2 -- 9 January 2018
 * improve documentation
 * 8342: Add script to control flasherboards from IceBoot
