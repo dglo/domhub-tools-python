@@ -118,5 +118,15 @@ Note that unlike the previous DOMHub paging system, changes in DOM cabling
 (swapping a quad, for example), will no longer page the WOs, since this
 doesn't technically affect data-taking.  However, HubMoni will send the
 cabling information to Live, and Live will alert the operations group of
-the change.  
+the change via e-mail.
+
+During maintenance on a hub, hubmoni user alerts can be paused by
+issuing the command
+
+    $ hubmoni.py -p <minutes>
+
+During this time, monitoring data will still be sent but user alerts
+will be suppressed.  After the pause time elapses, if the alert
+condition is still present, a user alert will be issued.  A group of
+hubs can be paused using the "domhub" script on expcont.
 
