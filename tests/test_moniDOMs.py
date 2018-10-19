@@ -110,7 +110,7 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(len(alerts), 1)
         self.assertEqual(alerts[0]["value"]["condition"], "%s: DOM power check failure" % self.hub)
         self.assertEqual(alerts[0]["value"]["desc"],
-                         "%s: Card 0 pair 1 pwr check: plugged(ok) current(ERR_CURRENT_BELOW_LIMITS,ok) voltage(ok,ok)" % self.hub)
+                         "%s-%s: Card 0 pair 1 pwr check: plugged(ok) current(ERR_CURRENT_BELOW_LIMITS,ok) voltage(ok,ok)" % (self.cluster, self.hub))
         
         # Fake more alerts
         self.hubconfig[self.cluster][self.hub]["comm"] = 3
@@ -120,7 +120,8 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(alerts[0]["value"]["condition"],
                          "%s: unexpected number of DOMs" % self.hub)
         self.assertEqual(alerts[0]["value"]["desc"],
-                         "%s: expected 3 communicating DOMs, found 4" % self.hub)
+                         "%s-%s: expected 3 communicating DOMs, found 4" % \
+                             (self.cluster, self.hub))
         
         self.hubconfig[self.cluster][self.hub]["comm"] = 4        
         self.hubconfig[self.cluster][self.hub]["dor"] = 1
@@ -129,7 +130,7 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(alerts[0]["value"]["condition"], 
                          "%s: unexpected number of DOR cards" % self.hub)
         self.assertEqual(alerts[0]["value"]["desc"],
-                         "%s: expected 1 DOR cards, found 2" % self.hub)
+                         "%s-%s: expected 1 DOR cards, found 2" % (self.cluster, self.hub))
 
 def suite():
     return unittest.TestLoader().loadTestsFromTestCase(MoniDOMTests)
