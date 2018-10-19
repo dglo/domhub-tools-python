@@ -32,6 +32,7 @@ import hubmonitools
 # Hubmoni internal file locations
 PIDFILE = "/tmp/hubmoni.pid"
 LOGFILE = "/tmp/hubmoni.log"
+PAUSEFILE = "/tmp/hubmoni.pause"
 
 # Default hubmoni configuration file
 HUBMONICONFIG = os.environ['HOME']+"/hubmoni.config"
@@ -64,16 +65,36 @@ def getVersion():
     return pkg_resources.get_distribution('domhub-tools-python').version
 
 #-------------------------------------------------------------------
+# Alert pause file handling
+
+def createPauseFile(pause_time):
+    with open(PAUSEFILE, "w") as f:
+        pause_to = datetime.datetime.now()+datetime.timedelta(minutes=pause_time)
+        f.write(datetime.datetime.strftime(pause_to, "%Y-%m-%d %H:%M:%S.%f"))
+    return
+
+def checkPauseFile():
+    paused = False
+    if os.path.isfile(PAUSEFILE):
+        with open(PAUSEFILE, "r") as f:
+            pause_to_str = f.readline()
+        pause_to = datetime.datetime.strptime(pause_to_str, "%Y-%m-%d %H:%M:%S.%f")
+        paused = (datetime.datetime.now() < pause_to)
+    return paused
+
+#-------------------------------------------------------------------
 def main():
 
     # Parse command line arguments
     parser = OptionParser()
     parser.add_option("-c", "--config", dest="config_file",
-                      help="hubmoni configuration file", default=HUBMONICONFIG)
+                      help="configuration file", default=HUBMONICONFIG)
     parser.add_option("-s", "--simulate", action="store_true", dest="simulate",
-                      help="simulation mode for testing", default=False)
+                      help="simulation mode (don't send ZMQ)", default=False)
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
                       help="print monitoring records to STDOUT", default=False)
+    parser.add_option("-p", "--pause",  type="int", dest="pause_time",
+                      help="pause alerts for <#> minutes")
     (options, args) = parser.parse_args()
 
     # Read configuration file
@@ -83,8 +104,15 @@ def main():
     simulate = options.simulate
     verbose = options.verbose
 
+    # Check that pause time is sane
+    pause_time = options.pause_time
+    if (pause_time is not None) and (pause_time < 0) or (pause_time > config.MAX_PAUSE_TIME):
+        sys.stderr.write("Error: pause time must be between 0 and %d minutes, exiting.\n" \
+                             % pause_time)
+        sys.exit(-1)
+    
     #-------------------------------------------------------------------
-    # Before doing anything, create a PID file so we only run this once
+    # Before starting monitoring, create a PID file so we only run this once
     pid = str(os.getpid())
 
     is_running = False
@@ -101,12 +129,23 @@ def main():
         else:
             is_running = True
 
+    # If we're already running, check to see if the user has requested 
+    # that we pause alerts for a certain time
     if is_running:
-        if verbose:
-            sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
+        if pause_time is None:
+            if verbose:
+                sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
+        else:
+            # Create pause file
+            sys.stdout.write("Pausing alerts for %d minutes...\n" % pause_time)
+            createPauseFile(pause_time)
         sys.exit(0)
     else:
-        file(PIDFILE, 'w').write(pid)
+        if pause_time is None:
+            file(PIDFILE, 'w').write(pid)
+        else:
+            sys.stderr.write("Pause requested but %s not running, existing.\n" % sys.argv[0])
+            sys.exit(-1)
     
     # Register CTRL-C
     signal.signal(signal.SIGINT, lambda signal, frame: sys.exit(0))
@@ -191,13 +230,16 @@ def main():
             else:
                 logger.warn("DOM %s appears to be in configboot, skipping" % dom.cwd())
 
-        # Check for any alerts and send them
-        uptime = getUptime()
-        if (uptime < 0) or (uptime > config.ALERT_GRACE_PERIOD):
-            try:
-                newAlerts = hubmonitools.moniDOMs.moniAlerts(config, dorDriver, hubconfig, hub, cluster)
-            except AttributeError:
-                logger.error("Malformed alerts... driver unloaded?!")
+        # Should we sending alerts?
+        paused = checkPauseFile()
+        uptime = getUptime()        
+        sendAlerts = not paused and ((uptime < 0) or (uptime > config.ALERT_GRACE_PERIOD))
+
+        # Check for any alert conditions
+        try:
+            newAlerts = hubmonitools.moniDOMs.moniAlerts(config, dorDriver, hubconfig, hub, cluster)
+        except AttributeError:
+            logger.error("Malformed alerts... driver unloaded?!")
 
         # Clear alerts that have gone away
         for alert in activeAlerts:
@@ -207,17 +249,20 @@ def main():
         # Send new alerts that are not active
         for alert in newAlerts:
             if alert not in activeAlerts:
-                if verbose:
-                    print alert
-                if not simulate or not verbose:
-                    try:
-                        s.send_json(alert, flags=zmq.NOBLOCK)
-                        logger.info("sent %dB moni alert" % (len(json.dumps(alert))))
-                    except zmq.ZMQError:
-                        logger.error("couldn't send JSON to socket.", exc_info=sys.exc_info())
-                        keepConnecting(s,addr,logger)
+                if sendAlerts:
+                    if verbose:
+                        print alert
+                    if not simulate or not verbose:
+                        try:
+                            s.send_json(alert, flags=zmq.NOBLOCK)
+                            logger.info("sent %dB moni alert" % (len(json.dumps(alert))))
+                        except zmq.ZMQError:
+                            logger.error("couldn't send JSON to socket.", exc_info=sys.exc_info())
+                            keepConnecting(s,addr,logger)
                         
-                activeAlerts.append(alert)
+                    activeAlerts.append(alert)
+                else:
+                    logger.warn("moni alert detected but not sent (paused)")
 
         # If it's time, create the monitoring records and send them
         td = datetime.datetime.utcnow() - lastSentTime
