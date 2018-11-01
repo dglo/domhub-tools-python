@@ -79,7 +79,13 @@ def checkPauseFile():
         with open(PAUSEFILE, "r") as f:
             pause_to_str = f.readline()
         pause_to = datetime.datetime.strptime(pause_to_str, "%Y-%m-%d %H:%M:%S.%f")
-        paused = (datetime.datetime.now() < pause_to)
+        # Sanity check that someone hasn't hand-disabled for a ridiculously long time
+        max_pause_to = datetime.datetime.now()+datetime.timedelta(minutes=config.MAX_PAUSE_TIME)
+        if (pause_to > max_pause_to):
+            logger.warn("overly long pause time detected, ignoring!")
+        else:
+            paused = (datetime.datetime.now() < pause_to)
+        
     return paused
 
 #-------------------------------------------------------------------
@@ -110,7 +116,14 @@ def main():
         sys.stderr.write("Error: pause time must be between 0 and %d minutes, exiting.\n" \
                              % pause_time)
         sys.exit(-1)
-    
+
+    #-------------------------------------------------------------------
+    # Create pause file if requested and then exit
+    if pause_time is not None:        
+        sys.stdout.write("Pausing alerts for %d minutes...\n" % pause_time)
+        createPauseFile(pause_time)
+        sys.exit(0)
+
     #-------------------------------------------------------------------
     # Before starting monitoring, create a PID file so we only run this once
     pid = str(os.getpid())
@@ -129,23 +142,11 @@ def main():
         else:
             is_running = True
 
-    # If we're already running, check to see if the user has requested 
-    # that we pause alerts for a certain time
     if is_running:
-        if pause_time is None:
-            if verbose:
-                sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
-        else:
-            # Create pause file
-            sys.stdout.write("Pausing alerts for %d minutes...\n" % pause_time)
-            createPauseFile(pause_time)
-        sys.exit(0)
+        if verbose:
+            sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
     else:
-        if pause_time is None:
-            file(PIDFILE, 'w').write(pid)
-        else:
-            sys.stderr.write("Pause requested but %s not running, existing.\n" % sys.argv[0])
-            sys.exit(-1)
+        file(PIDFILE, 'w').write(pid)
     
     # Register CTRL-C
     signal.signal(signal.SIGINT, lambda signal, frame: sys.exit(0))
