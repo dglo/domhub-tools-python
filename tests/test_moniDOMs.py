@@ -34,7 +34,7 @@ class MoniDOMTests(unittest.TestCase):
         commDOMs = self.dor.getCommunicatingDOMs()
         for dom in commDOMs:
             self.moniDOMs[dom.cwd()] = hubmonitools.HubMoniDOM(dom, self.hub)
-            
+
     def testMoniDOMs(self):
         # Check that we have all CWDs and check 
         self.assertEqual(sorted(self.moniDOMs.keys()), ['00A', '00B', '01A', '01B'])
@@ -60,6 +60,9 @@ class MoniDOMTests(unittest.TestCase):
         crec = [r for r in recs if r["varname"] == "dom_cabling"][0]
         self.assertEqual(crec["prio"], 2)
         self.assertEqual(crec["value"]["value"]["2029-3"], "01B")
+
+        # Check that we don't have a record for the DOM in configboot
+        self.failUnless("-" not in crec["value"]["value"].keys())
 
         # Get another set of monitoring records
         commDOMs = self.dor.getCommunicatingDOMs()
