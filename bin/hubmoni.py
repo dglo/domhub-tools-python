@@ -73,14 +73,14 @@ def createPauseFile(pause_time):
         f.write(datetime.datetime.strftime(pause_to, "%Y-%m-%d %H:%M:%S.%f"))
     return
 
-def checkPauseFile():
+def checkPauseFile(max_pause_time, logger):
     paused = False
     if os.path.isfile(PAUSEFILE):
         with open(PAUSEFILE, "r") as f:
             pause_to_str = f.readline()
         pause_to = datetime.datetime.strptime(pause_to_str, "%Y-%m-%d %H:%M:%S.%f")
         # Sanity check that someone hasn't hand-disabled for a ridiculously long time
-        max_pause_to = datetime.datetime.now()+datetime.timedelta(minutes=config.MAX_PAUSE_TIME)
+        max_pause_to = datetime.datetime.now()+datetime.timedelta(minutes=max_pause_time)
         if (pause_to > max_pause_to):
             logger.warn("overly long pause time detected, ignoring!")
         else:
@@ -114,7 +114,7 @@ def main():
     pause_time = options.pause_time
     if (pause_time is not None) and (pause_time < 0) or (pause_time > config.MAX_PAUSE_TIME):
         sys.stderr.write("Error: pause time must be between 0 and %d minutes, exiting.\n" \
-                             % pause_time)
+                             % config.MAX_PAUSE_TIME)
         sys.exit(-1)
 
     #-------------------------------------------------------------------
@@ -233,8 +233,8 @@ def main():
                 logger.warn("DOM %s appears to be in configboot, skipping" % dom.cwd())
 
         # Should we sending alerts?
-        paused = checkPauseFile()
-        uptime = getUptime()        
+        paused = checkPauseFile(config.MAX_PAUSE_TIME, logger)
+        uptime = getUptime()
         sendAlerts = not paused and ((uptime < 0) or (uptime > config.ALERT_GRACE_PERIOD))
 
         # Check for any alert conditions

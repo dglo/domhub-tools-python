@@ -76,3 +76,42 @@ class HubMoniTests(unittest.TestCase):
         self.failUnless((len(pwrstat_recs) == (self.config.MAX_SIMLOOP_CNT*2)) and
                         (len(comstat_recs) == (self.config.MAX_SIMLOOP_CNT-1)*4) and
                         (len(cabling_recs) == (self.config.MAX_SIMLOOP_CNT)))
+
+class HubMoniPauseTests(unittest.TestCase):
+
+    def setUp(self):
+        # Pause hubmoni
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -p 1" % 
+               (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+                             cwd=HubMoniTests.ROOTDIR, shell=True)
+
+        self.config = hubmonitools.HubMoniConfig(HubMoniTests.CONFIGFILE)
+        server = ServerThread(self.config.ZMQ_PORT)
+        server.start()
+        time.sleep(1)
+
+        # Launch hubmoni
+        # Hack to fix up PYTHONPATH
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -s" % 
+               (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+                             cwd=HubMoniTests.ROOTDIR, shell=True)
+        if p:
+            stdout, stderr = p.communicate()
+
+        self.data = server.data
+        server.keepAlive = False
+        # Wait for thread to exit
+        time.sleep(2)
+
+    def tearDown(self):
+        # Remove any existing pause file
+        try:
+            os.unlink("/tmp/hubmoni.pause")
+        except:
+            pass
+
+    def testPausedAlert(self):
+        alerts = [a for a in self.data if a["varname"] == "alert"]
+        self.failUnless(len(alerts) == 0)
