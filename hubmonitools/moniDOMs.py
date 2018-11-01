@@ -156,6 +156,8 @@ def moniRecords(config, moniDOMs, moniDOMsPrev):
             m = moniDOMs[cwd]
             rec["value"]["hub"] = m.hub
             omkey = m.dom.omkey()
+            if omkey is "-":
+                continue
             if (qty == "dom_pwrstat_voltage"):
                 rec.setDOMValue(omkey, m.voltage)
             elif (qty == "dom_pwrstat_current"):
