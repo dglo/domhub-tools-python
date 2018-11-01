@@ -145,6 +145,7 @@ def main():
     if is_running:
         if verbose:
             sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
+        sys.exit(0)
     else:
         file(PIDFILE, 'w').write(pid)
     
