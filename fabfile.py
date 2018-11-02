@@ -60,7 +60,10 @@ def deploy():
 def config():
     # Install the configuration files
     put('resources/hubConfig.json', 'hubConfig.json')
-    put('resources/hubmoni.config', 'hubmoni.config')
+    if os.path.isfile('resources/hubmoni.%s.config' % cluster):
+        put('resources/hubmoni.%s.config' % cluster, 'hubmoni.config')
+    else:
+        put('resources/hubmoni.config', 'hubmoni.config')
     
 @hosts(env.hosts)
 def stop():
