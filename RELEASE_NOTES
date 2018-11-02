@@ -1,6 +1,10 @@
-v1.7.0 -- TBD
+v1.7.0 -- 2 November 2018
+* 8539: hubmoni: support separate configuration file on SPTS
+* 8518: hubmoni can report OMKey as -
+* 8442: hubmoni: add disable commands
 * 8300: hubmoni: add cluster to user alert notifications
 * The_Penguin is no longer dead, so fix waiver test
+* Fix typo in nicknames.txt for Farfalle (SPTS)
 
 v1.6.2 -- 9 January 2018
 * improve documentation
