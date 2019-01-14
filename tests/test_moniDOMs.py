@@ -47,7 +47,10 @@ class MoniDOMTests(unittest.TestCase):
         self.failUnless(m.pwrcheck.ok)
 
     def testMoniRecord(self):        
-        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, {})
+        recsRaw = hubmonitools.moniRecords(self.config, self.moniDOMs, {})
+
+        # Pull out only the valid records
+        recs = [r for r in recsRaw if r.valid]
 
         # Check that stats *don't* appear when there is only one record
         self.failUnless('dom_comstat_retx' not in recs)
@@ -75,7 +78,8 @@ class MoniDOMTests(unittest.TestCase):
             if (cwd == "01A"):
                 self.moniDOMs[cwd].comstat.badpkt += 8
             
-        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
+        recsRaw = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
+        recs = [r for r in recsRaw if r.valid]
         self.assertEqual(len(recs), 7)
 
         currentRec = [r for r in recs if r["varname"] == "dom_pwrstat_current"][0]
@@ -95,7 +99,8 @@ class MoniDOMTests(unittest.TestCase):
             if (cwd == "00A"):
                 self.moniDOMs[cwd].comstat.rxbytes += 162000000
 
-        recs = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
+        recsRaw = hubmonitools.moniRecords(self.config, self.moniDOMs, moniDOMsPrev)
+        recs = [r for r in recsRaw if r.valid]
 
         throughputRec = [r for r in recs if r["varname"] == "dom_comstat_rxbytes"][0]
         starttime = datetime.strptime(throughputRec["value"]["recordingStartTime"],
