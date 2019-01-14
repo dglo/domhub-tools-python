@@ -189,9 +189,8 @@ def moniRecords(config, moniDOMs, moniDOMsPrev):
                         rec["value"]["recordingStopTime"] = m.updateTime
                         rec["value"]["recordingStartTime"] = mPrev.updateTime
 
-        if rec.valid:
-            recs.append(rec)
-                
+        recs.append(rec)
+        
     return recs
 
 

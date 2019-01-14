@@ -1,3 +1,6 @@
+Next
+* 8575: Log warnings when invalid monitoring records aren't transmitted
+
 v1.7.0 -- 2 November 2018
 * 8539: hubmoni: support separate configuration file on SPTS
 * 8518: hubmoni can report OMKey as -

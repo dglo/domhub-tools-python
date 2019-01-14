@@ -282,6 +282,11 @@ def main():
                 if verbose:
                     print rec
 
+                if not rec.valid:
+                    logger.warn("invalid monitoring record for %s, not sending", 
+                                rec["varname"]);
+                    continue
+
                 if not simulate or not verbose:
                     try:
                         s.send_json(rec, flags=zmq.NOBLOCK)
