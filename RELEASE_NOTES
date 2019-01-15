@@ -1,6 +1,7 @@
-Next
+v1.7.1 -- 15 January 2019
 * 8526: hubmoni verbose mode shouldn't suppress alert transmission
 * 8575: Log warnings when invalid monitoring records aren't transmitted
+* Update default hubConfig.json for dead DOMs on string 67 
 
 v1.7.0 -- 2 November 2018
 * 8539: hubmoni: support separate configuration file on SPTS

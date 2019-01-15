@@ -9,7 +9,7 @@ except ImportError:
     pass
 
 setup(name='domhub-tools-python',
-      version='1.7.0',
+      version='1.7.1',
       description='IceCube DOMHub Monitoring',
       author='John Kelley',
       author_email='jkelley@icecube.wisc.edu',
