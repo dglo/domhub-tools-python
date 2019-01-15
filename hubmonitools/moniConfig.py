@@ -52,9 +52,12 @@ class HubMoniConfig(dict):
         # Maximum pause time, minutes
         "MAX_PAUSE_TIME" : 120,
 
-        # In testing mode, how many times to report
-        # records before exiting
-        "MAX_SIMLOOP_CNT" : 2
+        # How many times to report records before 
+        # exiting (-1 == loop forever), for testing
+        "MAX_LOOP_CNT" : -1,
+
+        # Hostname override for testing
+        "HOSTNAME" : None
         }
         
     def __init__(self, configFile=None):
