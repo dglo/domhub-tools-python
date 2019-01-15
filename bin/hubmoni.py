@@ -184,10 +184,10 @@ def main():
     context = zmq.Context()
     s = context.socket(zmq.PUSH)
     addr = "tcp://%s:%d" % (config.ZMQ_HOSTNAME, config.ZMQ_PORT)
-    if not simulate or not verbose:
+    if not simulate:
         keepConnecting(s,addr,logger)
     else:
-        logger.info("SIMULATION MODE: data sent only if verbose=False")
+        logger.info("SIMULATION MODE: data and alerts not sent via ZMQ")
 
     # Register SIGINT to exit
     signal.signal(signal.SIGINT, lambda signum, frame: sys.exit(0))
@@ -205,10 +205,10 @@ def main():
         sys.exit(-1)
 
     hubconfig = hubmonitools.HubConfig(config.HUBCONFIG)
-    if not simulate:
+    if config.HOSTNAME is None:
         hub,cluster = hubmonitools.getHostCluster()
     else:
-        hub,cluster = hubmonitools.getHostCluster("ichub29.spts.icecube.wisc.edu")
+        hub,cluster = hubmonitools.getHostCluster(config.HOSTNAME)
     
     #-------------------------------------------------------------------
     # Loop forever, looking for communicating DOMs and reporting moni records    
@@ -217,7 +217,7 @@ def main():
     mDOMsPrev = {}
     activeAlerts = []
     newAlerts = []
-    simLoop = 0
+    loopCnt = 0
     
     while True:
         commDOMs = dorDriver.getCommunicatingDOMs()
@@ -254,7 +254,7 @@ def main():
                 if sendAlerts:
                     if verbose:
                         print alert
-                    if not simulate or not verbose:
+                    if not simulate:
                         try:
                             s.send_json(alert, flags=zmq.NOBLOCK)
                             logger.info("sent %dB moni alert" % (len(json.dumps(alert))))
@@ -287,7 +287,7 @@ def main():
                                 rec["varname"]);
                     continue
 
-                if not simulate or not verbose:
+                if not simulate:
                     try:
                         s.send_json(rec, flags=zmq.NOBLOCK)
                         logger.info("sent %dB moni record" % (len(json.dumps(rec))))
@@ -300,11 +300,11 @@ def main():
             mDOMsPrev = mDOMs
             mDOMs = {}
             lastSentTime = datetime.datetime.utcnow()
-
-            if simulate:
-                simLoop += 1
-                if simLoop == config.MAX_SIMLOOP_CNT:
-                    sys.exit(0)
+            
+            loopCnt += 1
+            if loopCnt == config.MAX_LOOP_CNT:
+                logger.info("maximum loop count reached, exiting")
+                sys.exit(0)
 
         time.sleep(config.MONI_PERIOD)
 

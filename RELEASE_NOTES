@@ -1,4 +1,5 @@
 Next
+* 8526: hubmoni verbose mode shouldn't suppress alert transmission
 * 8575: Log warnings when invalid monitoring records aren't transmitted
 
 v1.7.0 -- 2 November 2018
