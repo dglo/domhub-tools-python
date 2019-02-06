@@ -240,7 +240,7 @@ def main():
         # Check for any alert conditions
         try:
             newAlerts = hubmonitools.moniDOMs.moniAlerts(config, dorDriver, hubconfig, hub, cluster)
-        except AttributeError:
+        except (AttributeError, IOError):
             logger.error("Malformed alerts... driver unloaded?!")
 
         # Clear alerts that have gone away
@@ -275,7 +275,7 @@ def main():
             recs = []
             try:
                 recs = hubmonitools.moniDOMs.moniRecords(config, mDOMs, mDOMsPrev) 
-            except AttributeError:
+            except (AttributeError, IOError):
                 logger.error("Malformed moni records... driver unloaded?!")
             
             for rec in recs:
