@@ -7,7 +7,11 @@ from fabric.api import *
 import os.path
 import hubmonitools
 
-HUBMONICMD = "~/.local/bin/hubmoni.py"
+HUBMONICMD = "hubmoni.py"
+CRONCMD = "source /usr/local/pdaq/env/bin/activate && hubmoni.py"
+
+INSTALL_USER = "pdaq"
+CRON_USER = "testdaq"
 
 # Remote hosts list: all of the hubs on this cluster
 hubconf = hubmonitools.HubConfig(hubConfigFile="resources/hubConfig.json")
@@ -36,25 +40,20 @@ def deploy():
     # Stop any existing process
     stop()
 
-    # figure out the release name and version
-    dist = local('python setup.py --fullname', capture=True).strip()
-    # upload the source tarball to the temporary folder on the server
-    put('dist/%s.tar.gz' % dist, '/tmp/%s.tar.gz' % dist)
-    # create a place where we can unzip the tarball, then enter
-    # that directory and unzip it
-    run('[[ -d /tmp/%s ]] || mkdir /tmp/%s' % (dist, dist))
-    with cd('/tmp/%s' % dist):
-        run('tar xzf /tmp/%s.tar.gz' % dist)
-        # now install the package
-        run('cd %s; /usr/bin/env python setup.py install --user' % dist)
-        # now that all is set up, delete the folder again
-        run('rm -rf /tmp/%s /tmp/%s.tar.gz' % (dist, dist))
+    with settings(user=INSTALL_USER):
+        # figure out the release name and version
+        dist = local('python setup.py --fullname', capture=True).strip()
+        # upload the source tarball to the temporary folder on the server
+        put('dist/%s.tar.gz' % dist, '/tmp/%s.tar.gz' % dist)
+        # now install the package with pip
+        run('pip install /tmp/%s.tar.gz' % dist)
+        # delete the tarball
+        run('rm -f /tmp/%s.tar.gz' % dist)
 
     # Install the configuration files
     config()
-
     # Install the cron job
-    installCronjob("hubmoni cron", "*/10 * * * * %s" % HUBMONICMD)
+    installCronjob("hubmoni cron", "*/10 * * * * %s" % CRONCMD)
 
 @hosts(env.hosts)
 def config():
@@ -83,4 +82,4 @@ def restart():
     #start()
 
 # the user to use for the remote commands
-env.user = 'testdaq'
+env.user = CRON_USER
