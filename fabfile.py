@@ -1,5 +1,5 @@
-# Fabric script for hubmoni installation.  Use
-#   fab pack deploy
+# Fabric script for hubmoni installation.  
+# See the INSTALL file for usage.
 #
 import sys
 import time
@@ -7,8 +7,8 @@ from fabric.api import *
 import os.path
 import hubmonitools
 
-HUBMONICMD = "hubmoni.py"
-CRONCMD = "source /usr/local/pdaq/env/bin/activate && hubmoni.py"
+HUBMONICMD = "hubmoni"
+CRONCMD = "source /usr/local/pdaq/env/bin/activate && "+HUBMONICMD
 
 INSTALL_USER = "pdaq"
 CRON_USER = "testdaq"
@@ -25,8 +25,12 @@ if (len(env.hosts) == 0):
 
 def installCronjob(label, job):
     bashstr = '(crontab -l 2>/dev/null | grep -x \"# %s" > /dev/null 2>/dev/null)' % label
-    bashstr += ' || (crontab -l 2>/dev/null | { cat; echo; echo \"# %s\";' % label
-    bashstr += 'echo \"%s\"; echo; } | crontab -)' % job
+    bashstr += ' || (crontab -l 2>/dev/null | { cat; echo \"# %s\";' % label
+    bashstr += 'echo \"%s\"; } | crontab -)' % job
+    run(bashstr)
+
+def removeCronjob(label):
+    bashstr = 'crontab -l 2>/dev/null | sed \'/# %s/,+1d\' | crontab -' % label
     run(bashstr)
 
 @runs_once
@@ -46,12 +50,14 @@ def deploy():
         # upload the source tarball to the temporary folder on the server
         put('dist/%s.tar.gz' % dist, '/tmp/%s.tar.gz' % dist)
         # now install the package with pip
-        run('pip install /tmp/%s.tar.gz' % dist)
+        run('pip install --upgrade /tmp/%s.tar.gz' % dist)
         # delete the tarball
         run('rm -f /tmp/%s.tar.gz' % dist)
 
     # Install the configuration files
     config()
+    # Remove any old cron job
+    removeCronjob("hubmoni cron")
     # Install the cron job
     installCronjob("hubmoni cron", "*/10 * * * * %s" % CRONCMD)
 

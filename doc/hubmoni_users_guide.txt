@@ -72,7 +72,7 @@ example above, DOR card 2 pair 2 is waived of all power check errors.
 
 A hub configuration may need to be changed if, for example, DOMs fail or
 are temporarily disconnected.  For temporary changes, the copy on the hub
-in ~testdaq/hubConfig.json can be modified, but then the hubmoni.py process
+in ~testdaq/hubConfig.json can be modified, but then the hubmoni process
 must be killed (cron will restart it).  Permanent changes should be made to
 the configuration file in the resources/ directory and can be installed to
 the hubs via
@@ -123,7 +123,7 @@ the change via e-mail.
 During maintenance on a hub, hubmoni user alerts can be paused by
 issuing the command
 
-    $ hubmoni.py -p <minutes>
+    $ hubmoni -p <minutes>
 
 During this time, monitoring data will still be sent but user alerts
 will be suppressed.  After the pause time elapses, if the alert
