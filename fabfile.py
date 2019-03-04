@@ -56,10 +56,12 @@ def deploy():
 
     # Install the configuration files
     config()
-    # Remove any old cron job
+    # Remove any old cron jobs
     removeCronjob("hubmoni cron")
-    # Install the cron job
+    removeCronjob("hubmoni-reboot cron")
+    # Install the cron jobs
     installCronjob("hubmoni cron", "*/10 * * * * %s" % CRONCMD)
+    installCronjob("hubmoni-reboot cron", "@reboot %s" % CRONCMD)
 
 @hosts(env.hosts)
 def config():
