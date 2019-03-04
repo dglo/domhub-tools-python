@@ -43,7 +43,7 @@ class HubMoniTests(unittest.TestCase):
 
         # Launch hubmoni
         # Hack to fix up PYTHONPATH
-        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s" % 
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
@@ -81,7 +81,7 @@ class HubMoniPauseTests(unittest.TestCase):
 
     def setUp(self):
         # Pause hubmoni
-        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -p 1" % 
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s -p 1" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
@@ -93,7 +93,7 @@ class HubMoniPauseTests(unittest.TestCase):
 
         # Launch hubmoni
         # Hack to fix up PYTHONPATH
-        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s" % 
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
@@ -128,7 +128,7 @@ class HubMoniModeTests(unittest.TestCase):
 
         # Launch hubmoni
         # Hack to fix up PYTHONPATH
-        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni.py -c %s -s -v" % 
+        cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s -s -v" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
