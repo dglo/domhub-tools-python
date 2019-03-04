@@ -15,6 +15,6 @@ setup(name='domhub-tools-python',
       author_email='jkelley@icecube.wisc.edu',
       url='http://icecube.wisc.edu',
       test_suite="tests",
-      scripts=['bin/hubmoni.py', 'bin/domstate.py', 'bin/status.py', 'bin/flasher.py'],
+      scripts=['bin/hubmoni', 'bin/domstate.py', 'bin/status.py', 'bin/flasher.py'],
       packages=find_packages(exclude=["tests"])
       )
