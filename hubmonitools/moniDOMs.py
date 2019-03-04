@@ -149,6 +149,10 @@ def moniRecords(config, moniDOMs, moniDOMsPrev):
                        "dom_cabling"]
 
     recs = []
+    # Check that we have something to monitor
+    if len(moniDOMs) == 0:
+        return recs
+
     for qty in MONI_QUANTITIES:
         rec = HubMoniRecord(config, qty, countQty=("comstat" in qty))
         for cwd in moniDOMs:
