@@ -14,57 +14,57 @@ class DORTests(unittest.TestCase):
 
     def testBadPath(self):
         self.dor = dor.DOR("/bogus/mcbogus/")
-        self.failUnless((self.dor.getCommunicatingDOMs() == []) and (self.dor.getPluggedDOMs() == []))
+        self.assertTrue((self.dor.getCommunicatingDOMs() == []) and (self.dor.getPluggedDOMs() == []))
         
     def testCardScan(self):
-        self.failUnless(len(self.dor.cards) == 2)
+        self.assertTrue(len(self.dor.cards) == 2)
 
     def testPairScan(self):
-        self.failUnless((len(self.dor.cards[0].pairs) == 4) and
+        self.assertTrue((len(self.dor.cards[0].pairs) == 4) and
                         (len(self.dor.cards[1].pairs) == 4))
 
     def testDOMScan(self):
         # Don't need to be exhaustive here
-        self.failUnless((len(self.dor.cards[1].pairs[0].doms) == 2) and
+        self.assertTrue((len(self.dor.cards[1].pairs[0].doms) == 2) and
                         (len(self.dor.cards[0].pairs[2].doms) == 2))
 
     def testAllCommunicating(self):
         cwds = [d.cwd() for d in self.dor.getCommunicatingDOMs()]
         cwds.sort()
-        self.failUnless(cwds == ['00A', '00B', '01A', '01B'])
+        self.assertTrue(cwds == ['00A', '00B', '01A', '01B'])
         
     def testCurrent(self):
         cur = self.dor.cards[0].pairs[1].current()       
-        self.failUnless(cur == 101)
+        self.assertTrue(cur == 101)
 
     def testVoltage(self):
         v = self.dor.cards[0].pairs[0].voltage()
-        self.failUnless(math.fabs(v-89.124) < 0.001)
+        self.assertTrue(math.fabs(v-89.124) < 0.001)
 
     def testIsPlugged(self):
-        self.failUnless(self.dor.cards[0].pairs[1].isPlugged() and not self.dor.cards[1].pairs[3].isPlugged())
+        self.assertTrue(self.dor.cards[0].pairs[1].isPlugged() and not self.dor.cards[1].pairs[3].isPlugged())
 
     def testIsPowered(self):
-        self.failUnless(self.dor.cards[0].pairs[1].isPowered() and not self.dor.cards[1].pairs[3].isPowered())
+        self.assertTrue(self.dor.cards[0].pairs[1].isPowered() and not self.dor.cards[1].pairs[3].isPowered())
 
     def testIsCommunicating(self):
         doms = [self.dor.getDOM('00A'), self.dor.getDOM('10B'), self.dor.getDOM('70A')]
-        self.failUnless(doms[0].isCommunicating() and not doms[1].isCommunicating() and doms[2] is None)
+        self.assertTrue(doms[0].isCommunicating() and not doms[1].isCommunicating() and doms[2] is None)
 
     def testCommStats(self):
         cs = self.dor.getDOM('00A').commStats()
         cs1 = self.dor.getDOM('01A').commStats()
-        self.failUnless((cs.rxbytes == 157090610) and (cs.nretxb == 0) and
+        self.assertTrue((cs.rxbytes == 157090610) and (cs.nretxb == 0) and
                         (cs1.txacks == 26566) and (cs1.rxacks == 478))
 
     def testPwrCheck(self):
         pc = self.dor.cards[0].pairs[0].pwrCheck()
-        self.failUnless((pc.card == 0) and (pc.pair == 0) and pc.plugged and
+        self.assertTrue((pc.card == 0) and (pc.pair == 0) and pc.plugged and
                         pc.current_lo_ok and pc.current_hi_ok and
                         pc.voltage_lo_ok and pc.voltage_hi_ok and pc.ok)
 
         pc = self.dor.cards[0].pairs[1].pwrCheck()
-        self.failUnless((pc.card == 0) and (pc.pair == 1) and pc.plugged and
+        self.assertTrue((pc.card == 0) and (pc.pair == 1) and pc.plugged and
                         not pc.current_lo_ok and pc.current_hi_ok and
                         pc.voltage_lo_ok and pc.voltage_hi_ok and not pc.ok)
 
@@ -78,17 +78,17 @@ class DORTests(unittest.TestCase):
 
     def testDORSerial(self):
         c = self.dor.cards[1]
-        self.failUnless(c.serial() == 'R1B0628D05')
+        self.assertTrue(c.serial() == 'R1B0628D05')
 
     def testNicknames(self):
         dom = self.dor.getDOM('00A')
-        self.failUnless((dom.name() == 'Santa_Fe') and
+        self.assertTrue((dom.name() == 'Santa_Fe') and
                         (dom.omkey() == '2029-2') and
                         (dom.prodID() == 'TP5P0955'))
 
     def testConfigboot(self):
         dom = self.dor.getDOM('00B')
-        self.failUnless(not dom.isNotConfigboot())
+        self.assertTrue(not dom.isNotConfigboot())
         
     def testFPGA(self):
         fpgastr = '''FPGA registers:

@@ -47,9 +47,11 @@ class HubMoniTests(unittest.TestCase):
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
-        if p:
-            stdout, stderr = p.communicate()
-
+        stdout, stderr = p.communicate()
+        p.stdout.close()
+        p.stderr.close()
+        p.wait()
+        
         self.data = server.data
         server.keepAlive = False
         # Wait for thread to exit
@@ -60,10 +62,10 @@ class HubMoniTests(unittest.TestCase):
         # Here we just check that they are sent via ZMQ and
         # some of the configuration options
         alerts = [a for a in self.data if a["varname"] == "alert"]
-        self.failUnless(len(alerts) == 1)
+        self.assertTrue(len(alerts) == 1)
         a = alerts[0]
         # The test config file should override this
-        self.failUnless((a["value"]["notifies"][0]["receiver"] == "bogus@bogus.com") and
+        self.assertTrue((a["value"]["notifies"][0]["receiver"] == "bogus@bogus.com") and
                         (a["value"]["pages"]) and
                         (a["service"] == "hubmoni"))
 
@@ -73,7 +75,7 @@ class HubMoniTests(unittest.TestCase):
         pwrstat_recs = [r for r in self.data if "pwrstat" in r["varname"]]
         comstat_recs = [r for r in self.data if "comstat" in r["varname"]]
         cabling_recs = [r for r in self.data if "cabling" in r["varname"]]
-        self.failUnless((len(pwrstat_recs) == (self.config.MAX_LOOP_CNT*2)) and
+        self.assertTrue((len(pwrstat_recs) == (self.config.MAX_LOOP_CNT*2)) and
                         (len(comstat_recs) == (self.config.MAX_LOOP_CNT-1)*4) and
                         (len(cabling_recs) == (self.config.MAX_LOOP_CNT)))
 
@@ -85,7 +87,10 @@ class HubMoniPauseTests(unittest.TestCase):
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
-
+        p.stdout.close()
+        p.stderr.close()
+        p.wait()
+        
         self.config = hubmonitools.HubMoniConfig(HubMoniTests.CONFIGFILE)
         server = ServerThread(self.config.ZMQ_PORT)
         server.start()
@@ -97,14 +102,16 @@ class HubMoniPauseTests(unittest.TestCase):
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
-        if p:
-            stdout, stderr = p.communicate()
-
+        stdout, stderr = p.communicate()
+        p.stdout.close()
+        p.stderr.close()
+        p.wait()
+        
         self.data = server.data
         server.keepAlive = False
         # Wait for thread to exit
         time.sleep(2)
-
+        
     def tearDown(self):
         # Remove any existing pause file
         try:
@@ -114,7 +121,7 @@ class HubMoniPauseTests(unittest.TestCase):
 
     def testPausedAlert(self):
         alerts = [a for a in self.data if a["varname"] == "alert"]
-        self.failUnless(len(alerts) == 0)
+        self.assertTrue(len(alerts) == 0)
 
 class HubMoniModeTests(unittest.TestCase):
     CONFIGFILE = os.path.dirname(os.path.abspath(__file__))+"/hubmoni.config"
@@ -131,10 +138,12 @@ class HubMoniModeTests(unittest.TestCase):
         cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s -s -v" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
-                             cwd=HubMoniTests.ROOTDIR, shell=True)
-        if p:
-            stdout, stderr = p.communicate()
-
+                         cwd=HubMoniTests.ROOTDIR, shell=True)
+        stdout, stderr = p.communicate()
+        p.stdout.close()
+        p.stderr.close()
+        p.wait()
+        
         self.data = server.data
         self.stdout = stdout
 
@@ -145,9 +154,9 @@ class HubMoniModeTests(unittest.TestCase):
     def testHubMoniRecord(self):
         # We are in simulate and verbose mode, meaning the output
         # should be on stdout but not in the ZMQ data
-        self.failUnless(len(self.data) == 0)
+        self.assertTrue(len(self.data) == 0)
         # Don't fully parse the not-quite JSON stdout
         # Just make sure it's got stuff in it
-        self.failUnless(("pwrstat" in self.stdout) and
-                        ("comstat" in self.stdout) and
-                        ("cabling" in self.stdout))
+        self.assertTrue((b'pwrstat' in self.stdout) and
+                        (b'comstat' in self.stdout) and
+                        (b'cabling' in self.stdout))

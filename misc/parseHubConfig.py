@@ -2,6 +2,7 @@
 #
 # Parse old testdaq hubConfig.dat into useful a JSON dict
 #
+from __future__ import print_function
 import json
 
 f = open("hubConfig.dat", "r")
@@ -55,7 +56,7 @@ for line in f.readlines():
                                        }
 
 f.close()
-print json.dumps(hubConfig, sort_keys=True, indent=4, separators=(',', ': '))
+print(json.dumps(hubConfig, sort_keys=True, indent=4, separators=(',', ': ')))
 
 fout = open("hubConfig.json", "wb")
 json.dump(hubConfig, fout, sort_keys=True, indent=4, separators=(',', ': '))
