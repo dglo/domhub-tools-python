@@ -174,7 +174,7 @@ def moniRecords(config, moniDOMs, moniDOMsPrev):
                 if cwd not in moniDOMsPrev:
                     rec.valid = False
                 else:
-                    cnt = 0L
+                    cnt = 0
                     mPrev = moniDOMsPrev[cwd]
                     if (qty == "dom_comstat_retx"):
                         cnt = m.comstat.nretxb - mPrev.comstat.nretxb

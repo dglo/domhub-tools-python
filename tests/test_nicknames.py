@@ -12,19 +12,20 @@ class NicknamesTests(unittest.TestCase):
         self.nicks = nicknames.Nicknames(nicknameFile=NicknamesTests.PREFIX+"nicknames.txt")
 
     def testName(self):
-        self.failUnless((self.nicks.getDOMName('778fa3a8e2bf') == "Albino_Shouting_Gorilla") and
+        self.assertTrue((self.nicks.getDOMName('778fa3a8e2bf') == "Albino_Shouting_Gorilla") and
                         (self.nicks.getDOMName('deadbeefdead') == None))
 
     def testPosition(self):
-        self.failUnless((self.nicks.getDOMPosition('778fa3a8e2bf') == (84, 27)) and
+        self.assertTrue((self.nicks.getDOMPosition('778fa3a8e2bf') == (84, 27)) and
+                        (self.nicks.getDOMPosition('49df544c6bb6') == (65, 40)) and
                         (self.nicks.getDOMPosition('deadbeefdead') == None))
 
     def testDOMID(self):
-        self.failUnless((self.nicks.getDOMID('778fa3a8e2bf') == 'UL9P6630') and
+        self.assertTrue((self.nicks.getDOMID('778fa3a8e2bf') == 'UL9P6630') and
                         (self.nicks.getDOMID('deadbeefdead') == None))        
 
     def testFindMBID(self):
-        self.failUnless((self.nicks.findMBID('778fa3a8e2bf') == '778fa3a8e2bf') and
+        self.assertTrue((self.nicks.findMBID('778fa3a8e2bf') == '778fa3a8e2bf') and
                         (self.nicks.findMBID((84, 27)) == '778fa3a8e2bf') and
                         (self.nicks.findMBID('Albino_Shouting_Gorilla') == '778fa3a8e2bf') and
                         (self.nicks.findMBID('UL9P6630') == '778fa3a8e2bf') and

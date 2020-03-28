@@ -4,6 +4,7 @@
 #
 # Simple iceboot interface to flash a DOM.
 #
+from __future__ import print_function
 import sys
 import time
 import signal
@@ -42,7 +43,7 @@ class IceBoot(object):
         else:
             respOK = (resp[-1] == IceBoot.PROMPT) and (resp[1] == s)
         if not respOK:
-            print "DEBUG",s,resp
+            print("DEBUG",s,resp)
             raise UnexpectedDOMResponse('Bad DOM response %s' % resp[1])
     
     def flasherSetup(self, brightness, width, mask, rate):    
@@ -87,7 +88,7 @@ class GracefulKiller(object):
 def main(): 
     # Get command line arguments
     if len(sys.argv) < 2:
-        print "Usage: %s CWD <CWD ...>" % sys.argv[0]
+        print("Usage: %s CWD <CWD ...>" % sys.argv[0])
         sys.exit(0)
 
     killer = GracefulKiller()
@@ -104,17 +105,17 @@ def main():
         else:
             cwdOther = cw+'A'
         if cwdOther in cwds:
-            print "Error: cannot flash both DOMs on a wire pair, exiting!"
+            print("Error: cannot flash both DOMs on a wire pair, exiting!")
             sys.exit(-1)
 
         dom = dorDriver.getDOM(cwd)
         if dom is None:
-            print "Error: couldn't communicate with DOM %s, skipping!" % cwd
+            print("Error: couldn't communicate with DOM %s, skipping!" % cwd)
         else:
             doms.append(dom)
 
     if len(doms) == 0:
-        print "Error: no DOMs left to flash, exiting."
+        print("Error: no DOMs left to flash, exiting.")
         sys.exit(-1)
 
     # Get IceBoot interface for each DOM
@@ -123,14 +124,14 @@ def main():
         try:
             iceboots.append(IceBoot(dom))
         except InvalidDOMStateException:
-            print "Error: DOM %s is not in IceBoot, skipping!" % dom.cwd()
+            print("Error: DOM %s is not in IceBoot, skipping!" % dom.cwd())
 
     # Now start the flasher action
-    print "Setting up flasherboard on %d DOM(s)..." % len(iceboots)
+    print("Setting up flasherboard on %d DOM(s)..." % len(iceboots))
     for ib in iceboots:
         ib.flasherSetup(FLASHER_BRIGHTNESS, FLASHER_WIDTH, FLASHER_MASK, FLASHER_RATE_HZ)
             
-    print "*** FLASHING %d DOM(s) FOR %d SECONDS ***" % (len(iceboots), FLASHER_TIME_SEC)
+    print("*** FLASHING %d DOM(s) FOR %d SECONDS ***" % (len(iceboots), FLASHER_TIME_SEC))
     for ib in iceboots:
         ib.flasherStart()
 
@@ -139,7 +140,7 @@ def main():
         time.sleep(1)
         flashTime = flashTime+1
 
-    print "Stopping flashing and shutting down flasherboard..."
+    print("Stopping flashing and shutting down flasherboard...")
     for ib in iceboots:
         ib.flasherStop()
         ib.flasherShutdown()

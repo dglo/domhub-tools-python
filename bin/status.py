@@ -6,6 +6,7 @@
 # WIPAC 2016
 #
 
+from __future__ import print_function
 import sys
 import dor
 from hubmonitools import hubConfig
@@ -81,9 +82,9 @@ quick = (len(sys.argv) > 1) and (sys.argv[1] == '-q')
 #-------------------------------------------------------------------------------
 #TCUBE SUMMARY:
 
-print "-"*80
+print("-"*80)
 (host,cluster) = hubConfig.getHostCluster()
-print "%s SUMMARY:\n" % host.upper()
+print("%s SUMMARY:\n" % host.upper())
 
 
 states = None
@@ -104,9 +105,9 @@ for dom in doms:
 headers = False
 for summary in sorted(summaries):
     if not headers:
-        print summary.headers()
+        print(summary.headers())
         headers = True
-    print summary
+    print(summary)
 
 # Print a summary line
 countStr = "communicating %d DOMs; " % len(dorDriver.getCommunicatingDOMs())
@@ -115,9 +116,9 @@ if not quick:
         cnt = len([cwd for cwd in states if states[cwd] == state])
         countStr += "%s %d DOMs; " % (state, cnt)
 
-print ""
-print countStr
-print "-"*80
+print("")
+print(countStr)
+print("-"*80)
 
 
 #30B 5025 Q_8 R1B0621D05 COMM -        Radish                 0f9cff64d691 UP4P0286  68 mA  89V

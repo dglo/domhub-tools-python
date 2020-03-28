@@ -10,7 +10,7 @@ class MoniConfigTests(unittest.TestCase):
     
     def testConfigDefaults(self):
         config = hubmonitools.HubMoniConfig()
-        self.failUnless((config.MONI_SERVICE == "hubmoni") and
+        self.assertTrue((config.MONI_SERVICE == "hubmoni") and
                         (config.MONI_PRIORITY == 3) and
                         (config.ALERT_SERVICE == "hubmoni") and
                         (config.ALERT_PRIORITY == 1) and
@@ -22,9 +22,9 @@ class MoniConfigTests(unittest.TestCase):
     def testConfigFile(self):
         config = hubmonitools.HubMoniConfig(MoniConfigTests.PREFIX+"/hubmoni.config")
         # Make sure defaults are still there
-        self.failUnless((config.MONI_SERVICE == "hubmoni") and
+        self.assertTrue((config.MONI_SERVICE == "hubmoni") and
                         (config.ALERT_SERVICE == "hubmoni"))
         # Check overrides
-        self.failUnless((config.ALERT_PAGES == True) and
+        self.assertTrue((config.ALERT_PAGES == True) and
                         (config.ALERT_NOTIFIES == ["bogus@bogus.com"]))
         

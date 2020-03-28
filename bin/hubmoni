@@ -112,10 +112,11 @@ def main():
 
     # Check that pause time is sane
     pause_time = options.pause_time
-    if (pause_time is not None) and (pause_time < 0) or (pause_time > config.MAX_PAUSE_TIME):
-        sys.stderr.write("Error: pause time must be between 0 and %d minutes, exiting.\n" \
+    if (pause_time is not None):
+        if (pause_time < 0) or (pause_time > config.MAX_PAUSE_TIME):
+            sys.stderr.write("Error: pause time must be between 0 and %d minutes, exiting.\n" \
                              % config.MAX_PAUSE_TIME)
-        sys.exit(-1)
+            sys.exit(-1)
 
     #-------------------------------------------------------------------
     # Create pause file if requested and then exit
@@ -147,7 +148,8 @@ def main():
             sys.stderr.write("%s appears to be running already, exiting.\n" % sys.argv[0])
         sys.exit(0)
     else:
-        file(PIDFILE, 'w').write(pid)
+        with open(PIDFILE, 'w') as f:
+            f.write(pid)
     
     # Register CTRL-C
     signal.signal(signal.SIGINT, lambda signal, frame: sys.exit(0))
@@ -253,7 +255,7 @@ def main():
             if alert not in activeAlerts:
                 if sendAlerts:
                     if verbose:
-                        print alert
+                        print(alert)
                     if not simulate:
                         try:
                             s.send_json(alert, flags=zmq.NOBLOCK)
@@ -280,7 +282,7 @@ def main():
             
             for rec in recs:
                 if verbose:
-                    print rec
+                    print(rec)
 
                 if not rec.valid:
                     logger.warn("invalid monitoring record for %s, not sending", 

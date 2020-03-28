@@ -60,7 +60,7 @@ class DOR:
 
     def scan(self):
         self.cards = [ ]
-        for i in xrange(MAXCARDS):
+        for i in range(MAXCARDS):
             c = Card(i, self)
             if os.path.exists(c.path()):
                 self.cards.append(c)
@@ -77,8 +77,8 @@ class DOR:
     def getAllCWDs():
         """Return a list of all possible DOM CWDs on a hub"""
         return ["%01d%01d%s" % (card, pair, dom)
-                for card in xrange(MAXCARDS)
-                for pair in xrange(MAXPAIRS)
+                for card in range(MAXCARDS)
+                for pair in range(MAXPAIRS)
                 for dom in DOMLABELS]
 
     def getAllDOMs(self):
@@ -139,24 +139,24 @@ class Card:
         return os.path.join(self.driver.path(), "card%d" % self.id)
 
     def scan(self):
-        for i in xrange(MAXPAIRS):
+        for i in range(MAXPAIRS):
             p = WirePair(i, self)
             if os.path.exists(p.path()):
                 self.pairs.append(p)
                 
     def fpgaRegs(self):
-        f = file(os.path.join(self.path(), "fpga"),"r")
-        return f.read()
+        with open(os.path.join(self.path(), "fpga"),"r") as f:
+            return f.read()
 
     def revision(self):
-        f = file(os.path.join(self.path(), "rev"),"r")
-        return int(f.read())
+        with open(os.path.join(self.path(), "rev"),"r") as f:
+            return int(f.read())
 
     def serial(self):
-        f = file(os.path.join(self.path(), "test-log"))
-        m = re.compile("Serial number: (\S+)").match(f.read())
-        if m is None: return ""
-        return m.group(1)
+        with open(os.path.join(self.path(), "test-log")) as f:
+            m = re.compile("Serial number: (\S+)").match(f.read())
+            if m is None: return ""
+            return m.group(1)
 
 
 class WirePair:
@@ -182,35 +182,35 @@ class WirePair:
         return os.path.join(self.card.path(), "pair%d" % self.id)
 
     def scan(self):
-        for i in xrange(WirePair.MAXDOMS):
+        for i in range(WirePair.MAXDOMS):
             d = DOM(DOMLABELS[i], self)
             if os.path.exists(d.path()):
                 self.doms.append(d)
 
-    def current(self):
-        f = file(os.path.join(self.path(), "current"))        
-        m = re.compile(".+ current is (\d+) mA").match(f.read())
-        if m is None: return -1
-        return int(m.group(1))        
+    def current(self):        
+        with open(os.path.join(self.path(), "current")) as f:
+            m = re.compile(".+ current is (\d+) mA").match(f.read())
+            if m is None: return -1
+            return int(m.group(1))   
 
     def voltage(self):
-        f = file(os.path.join(self.path(), "voltage"))
-        m = re.compile(".+ voltage is ([0-9.]+) Volts").match(f.read())
-        if m is None: return -1
-        return float(m.group(1))        
+        with open(os.path.join(self.path(), "voltage")) as f:
+            m = re.compile(".+ voltage is ([0-9.]+) Volts").match(f.read())
+            if m is None: return -1
+            return float(m.group(1))
 
     def isPlugged(self):
-        f = file(os.path.join(self.path(), "is-plugged"))
-        s = f.read()
-        return (len(s) > 0) and (s.find("not") < 0)
+        with open(os.path.join(self.path(), "is-plugged")) as f:
+            s = f.read()
+            return (len(s) > 0) and (s.find("not") < 0)
 
-    def isPowered(self):
-        f = file(os.path.join(self.path(), "pwr"))
-        return (f.read().find("on") >= 0)    
+    def isPowered(self):        
+        with open(os.path.join(self.path(), "pwr")) as f:
+            return (f.read().find("on") >= 0)
 
     def pwrCheck(self):
-        f = file(os.path.join(self.path(), "pwr_check"))
-        return PwrCheck(f.read().rstrip())
+        with open(os.path.join(self.path(), "pwr_check")) as f:
+            return PwrCheck(f.read().rstrip())
 
 
 class DOM:
@@ -228,27 +228,27 @@ class DOM:
         return DEVPATH+"/dhc%dw%dd%s" % (self.card, self.pair, self.id)
 
     def isCommunicating(self):
-        f = file(os.path.join(self.path(), "is-communicating"))
-        s = f.read()
-        return (len(s) > 0) and (s.find("NOT") < 0)
+        with open(os.path.join(self.path(), "is-communicating")) as f:
+            s = f.read()
+            return (len(s) > 0) and (s.find("NOT") < 0)
 
     def isNotConfigboot(self):
-        f = file(os.path.join(self.path(), "is-not-configboot"))
-        s = f.read()
-        return (len(s) > 0) and (s.find("is out") >= 0)
+        with open(os.path.join(self.path(), "is-not-configboot")) as f:
+            s = f.read()
+            return (len(s) > 0) and (s.find("is out") >= 0)
         
     def mbid(self):
-        f = file(os.path.join(self.path(), "id"))
-        m = re.compile(".+ ID is ([0-9a-f]+)").match(f.read())
-        if m is not None:
-            return m.group(1)
+        with open(os.path.join(self.path(), "id")) as f:
+            m = re.compile(".+ ID is ([0-9a-f]+)").match(f.read())
+            if m is not None:
+                return m.group(1)
 
     def cwd(self):
         return "%s%s%s" % (self.pair.card.id, self.pair.id, self.id)
 
     def commStats(self):
-        f = file(os.path.join(self.path(), "comstat"))
-        return CommStats(f.read())
+        with open(os.path.join(self.path(), "comstat")) as f:
+            return CommStats(f.read())
 
     def pos(self):
         nicks = self.pair.card.driver.nicks
@@ -402,30 +402,30 @@ RXFIFO=(.+?)\ TXFIFO=(.+?)\ DOM_RXFIFO=(\S+)"""
         self.card = int(groups.pop(0))
         self.pair = int(groups.pop(0))
         self.dom = groups.pop(0)
-        self.rxbytes = long(groups.pop(0))
-        self.rxmsgs = long(groups.pop(0))
+        self.rxbytes = int(groups.pop(0))
+        self.rxmsgs = int(groups.pop(0))
         self.inq = int(groups.pop(0))
-        self.rxpkts = long(groups.pop(0))
-        self.rxacks = long(groups.pop(0))
+        self.rxpkts = int(groups.pop(0))
+        self.rxacks = int(groups.pop(0))
         self.badpkt = int(groups.pop(0))
         self.badhdr = int(groups.pop(0))
         self.badseq = int(groups.pop(0))
         self.rxctrl = int(groups.pop(0))
-        self.rxci = long(groups.pop(0))
-        self.rxic = long(groups.pop(0))
-        self.txbytes = long(groups.pop(0))
-        self.txmsgs = long(groups.pop(0))
+        self.rxci = int(groups.pop(0))
+        self.rxic = int(groups.pop(0))
+        self.txbytes = int(groups.pop(0))
+        self.txmsgs = int(groups.pop(0))
         self.outq = int(groups.pop(0))
         self.resent = int(groups.pop(0))
-        self.txpkts = long(groups.pop(0))
-        self.txacks = long(groups.pop(0))
+        self.txpkts = int(groups.pop(0))
+        self.txacks = int(groups.pop(0))
         self.nackq = int(groups.pop(0))
         self.nretxb = int(groups.pop(0))
         self.retxb_bytes = int(groups.pop(0))
         self.nretxq = int(groups.pop(0))
         self.nctrl = int(groups.pop(0))
-        self.txci = long(groups.pop(0))
-        self.txic = long(groups.pop(0))
+        self.txci = int(groups.pop(0))
+        self.txic = int(groups.pop(0))
         self.nconnects = int(groups.pop(0))
         self.hwtimeouts = int(groups.pop(0))
         self.open = (groups.pop(0)=='true') and True or False

@@ -6,6 +6,7 @@
 # Grab DOM positions, names, and DOM id out of the nicknames file
 # Return various dictionaries keyed on mainboard ID
 #
+from __future__ import print_function
 import sys
 import os
 
@@ -85,13 +86,13 @@ class Nicknames:
 
 def main():    
     if len(sys.argv) != 2:
-        print "Usage: %s <dom>" % sys.argv[0]
+        print("Usage: %s <dom>" % sys.argv[0])
         sys.exit(0)
     dom = sys.argv[1]
     nicks = Nicknames()
     mbid = nicks.findMBID(dom)
     if mbid is not None:
-        print mbid, nicks.getDOMID(mbid), nicks.getDOMName(mbid), nicks.getDOMPosition(mbid)
+        print(mbid, nicks.getDOMID(mbid), nicks.getDOMName(mbid), nicks.getDOMPosition(mbid))
     
 if __name__ == "__main__":
     main()

@@ -42,9 +42,9 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(m.dom.omkey(), "2029-2")
         self.assertEqual(m.current, 99)
         self.assertEqual(m.voltage, 89.124)
-        self.failUnless(m.dom.isCommunicating())
+        self.assertTrue(m.dom.isCommunicating())
         self.assertEqual(m.dom.mbid(), "931e24a072db")
-        self.failUnless(m.pwrcheck.ok)
+        self.assertTrue(m.pwrcheck.ok)
 
     def testMoniRecord(self):        
         recsRaw = hubmonitools.moniRecords(self.config, self.moniDOMs, {})
@@ -53,7 +53,7 @@ class MoniDOMTests(unittest.TestCase):
         recs = [r for r in recsRaw if r.valid]
 
         # Check that stats *don't* appear when there is only one record
-        self.failUnless('dom_comstat_retx' not in recs)
+        self.assertTrue('dom_comstat_retx' not in recs)
         self.assertEqual(len(recs), 3)
 
         # Check hub name
@@ -65,7 +65,7 @@ class MoniDOMTests(unittest.TestCase):
         self.assertEqual(crec["value"]["value"]["2029-3"], "01B")
 
         # Check that we don't have a record for the DOM in configboot
-        self.failUnless("-" not in crec["value"]["value"].keys())
+        self.assertTrue("-" not in crec["value"]["value"].keys())
 
         # Get another set of monitoring records
         commDOMs = self.dor.getCommunicatingDOMs()
