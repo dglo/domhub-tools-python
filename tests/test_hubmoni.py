@@ -45,6 +45,7 @@ class HubMoniTests(unittest.TestCase):
         # Hack to fix up PYTHONPATH
         cmd = ["export PYTHONPATH=%s ; ./bin/hubmoni -c %s" % 
                (HubMoniTests.ROOTDIR, HubMoniTests.CONFIGFILE) ]
+        # Better as ctx manager, but not py2.7-compatible
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
                              cwd=HubMoniTests.ROOTDIR, shell=True)
         stdout, stderr = p.communicate()
