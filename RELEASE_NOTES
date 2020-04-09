@@ -1,3 +1,6 @@
+v1.8 -- 9 April 2020
+* 8788: add python3 support
+
 v1.7.2 -- 4 March 2019
 * 8588: hubmoni can send empty dicts if DOMs disappear
 * 8592: Auto-generated wrapper script uses hardcoded python binary
