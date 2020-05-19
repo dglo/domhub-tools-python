@@ -100,9 +100,9 @@
             ]
         },
         "ichub09": {
-            "comm": 60,
+            "comm": 59,
             "dor": 8,
-            "iceboot": 60,
+            "iceboot": 59,
             "quad": 15,
             "waive": []
         },
@@ -543,7 +543,9 @@
             "dor": 8,
             "iceboot": 58,
             "quad": 15,
-            "waive": []
+            "waive": [
+	        "c6p0"
+	    ]
         },
         "ichub68": {
             "comm": 60,
